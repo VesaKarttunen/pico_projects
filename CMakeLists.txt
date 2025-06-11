@@ -20,7 +20,8 @@ add_executable(basic_demo
 target_link_libraries(basic_demo
     PRIVATE
         pico_stdlib
-        pico_cyw43_arch_none)
+        pico_cyw43_arch_none
+        hardware_adc)
 
 pico_enable_stdio_usb(basic_demo ON)
 pico_enable_stdio_uart(basic_demo ON)
