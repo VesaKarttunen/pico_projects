@@ -1,32 +1,14 @@
-# Prerequisites
-*.d
+# IDE
+.idea
+.vscode
+.cache
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Build files
+_deps
+build/
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*$py.class
