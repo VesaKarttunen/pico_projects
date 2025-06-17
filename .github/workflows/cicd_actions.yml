@@ -15,7 +15,7 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install missing SW tools and add them to PATH
+      - name: Install missing SW tools
         run: |
           choco install cppcheck
           winget upgrade --id Kitware.CMake -e --accept-package-agreements --accept-source-agreements
@@ -26,7 +26,7 @@ jobs:
           Expand-Archive -Path $pathToFile -DestinationPath $extractPath -Force
           
 
-      - name: Build with Arm-GNU 
+      - name: Add Arm-GNU to Path and build with it 
         run: |
           $env:Path ="${{github.workspace}}\arm-gnu\bin;" + $env:Path
           cmake -G "Ninja" -S .\ -B .\build
