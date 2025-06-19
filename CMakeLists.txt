@@ -13,15 +13,23 @@ project(basic_demo
     C CXX ASM)
  
 pico_sdk_init()
+
+set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/FreeRTOS-Kernel)
+include(cmake/FreeRTOS_Kernel_import.cmake)
  
 add_executable(basic_demo
     basic_demo/main.c)
- 
+
+target_include_directories(basic_demo
+    PRIVATE
+        basic_demo)    
+
 target_link_libraries(basic_demo
     PRIVATE
         pico_stdlib
         pico_cyw43_arch_none
-        hardware_adc)
+        hardware_adc
+        FreeRTOS-Kernel-Heap4)
 
 pico_enable_stdio_usb(basic_demo ON)
 pico_enable_stdio_uart(basic_demo ON)
