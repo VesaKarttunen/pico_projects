@@ -118,7 +118,7 @@ IntegerLiteralSeparator:
   Binary: 4
   BinaryMinDigits: 0
   Decimal: 3
-  DecimalMinDigits: 0
+  DecimalMinDigits: 6
   Hex: 4
   HexMinDigits: 0
 KeepEmptyLines:
