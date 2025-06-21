@@ -1,11 +1,14 @@
+// Local project
+#include "led/led.hpp"
+
+// Pico-SDK
 #include "hardware/adc.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
+// FreeRTOS
 #include "FreeRTOS.h"
 #include "task.h"
-
-#include <stdio.h>
 
 float ReadOnboardTemperature()
 {
@@ -16,11 +19,6 @@ float ReadOnboardTemperature()
     float tempC = 27.0f - (adc - 0.706f) / 0.001721f;
 
     return tempC;
-}
-
-void EnableLed(bool is_enabled)
-{
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, is_enabled);
 }
 
 void TaskPeriodic_5s(void* p)
@@ -60,7 +58,7 @@ void TaskPeriodic_1s(void* p)
         static bool toggle;
         toggle = !toggle;
 
-        EnableLed(toggle);
+        Led::SetState(toggle);
     }
 }
 
