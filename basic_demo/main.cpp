@@ -1,25 +1,16 @@
 // Local project
 #include "led/led.hpp"
+#include "temperature/temperature.hpp"
 
 // Pico-SDK
-#include "hardware/adc.h"
-#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
 // FreeRTOS
 #include "FreeRTOS.h"
 #include "task.h"
 
-float ReadOnboardTemperature()
-{
-    /* 12-bit conversion, assume max value == ADC_VREF == 3.3 V */
-    const float conversionFactor = 3.3f / (1 << 12);
-
-    float adc   = (float)adc_read() * conversionFactor;
-    float tempC = 27.0f - (adc - 0.706f) / 0.001721f;
-
-    return tempC;
-}
+//STD
+#include <cstdio>
 
 void TaskPeriodic_5s(void* p)
 {
@@ -36,7 +27,8 @@ void TaskPeriodic_5s(void* p)
             printf("Missed scheduler deadline");
         }
 
-        printf("Onboard temperature = %.02f C\n", ReadOnboardTemperature());
+        const float pcb_temperature_C = Temperature::GetPcbTemperature_C();
+        printf("PCB temperature = %.02f C\n", pcb_temperature_C);
     }
 }
 
@@ -64,25 +56,23 @@ void TaskPeriodic_1s(void* p)
 
 int main()
 {
-    cyw43_arch_init();
     stdio_init_all();
-    adc_init();
-    adc_set_temp_sensor_enabled(true);
-    adc_select_input(4);
+    Led::Init();
+    Temperature::Init();
 
     xTaskCreate(TaskPeriodic_5s,
                 "Task1",
                 configMINIMAL_STACK_SIZE,
-                NULL,
+                nullptr,
                 3,
-                NULL);
+                nullptr);
 
     xTaskCreate(TaskPeriodic_1s,
                 "Task2",
                 configMINIMAL_STACK_SIZE,
-                NULL,
+                nullptr,
                 4,
-                NULL);
+                nullptr);
 
     // Start the RTOS scheduler (infinite loop)
     vTaskStartScheduler();
