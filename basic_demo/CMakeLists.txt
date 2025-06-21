@@ -1,5 +1,7 @@
 add_executable(basic_demo
-    main.c)
+    led/led.cpp
+    temperature/temperature.cpp
+    main.cpp)
 
 target_include_directories(basic_demo
     PRIVATE
