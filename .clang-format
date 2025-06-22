@@ -118,7 +118,7 @@ IntegerLiteralSeparator:
   Binary: 4
   BinaryMinDigits: 0
   Decimal: 3
-  DecimalMinDigits: 6
+  DecimalMinDigits: 5
   Hex: 4
   HexMinDigits: 0
 KeepEmptyLines:
@@ -200,4 +200,3 @@ Standard: Latest
 TabWidth: 4
 UseTab: Never
   #WrapNamespaceBodyWithEmptyLines: Always # Note: clang-format 20 feature
- 
