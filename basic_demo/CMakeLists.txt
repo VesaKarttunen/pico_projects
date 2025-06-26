@@ -1,8 +1,9 @@
 add_executable(basic_demo
+    app_command/app_command.cpp
+    app_feedback/app_feedback.cpp
     led/led.cpp
     temperature/temperature.cpp
     wifi_comm/wifi_comm.cpp
-    app_command/app_command.cpp
     main.cpp)
 
 target_include_directories(basic_demo

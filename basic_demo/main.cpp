@@ -1,5 +1,4 @@
 // Local project
-#include "led/led.hpp"
 #include "temperature/temperature.hpp"
 #include "wifi_comm/wifi_comm.hpp"
 
@@ -13,7 +12,7 @@
 // STD
 #include <cstdio>
 
-static void TaskPeriodic_5s(void* p)
+static void TaskPeriodic_60s(void* p)
 {
     (void)p;
 
@@ -21,7 +20,7 @@ static void TaskPeriodic_5s(void* p)
 
     while (true)
     {
-        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(5000));
+        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(60'000));
 
         const float pcb_temperature_C = Temperature::GetPcbTemperature_C();
         printf("PCB temperature = %.02f C\n", pcb_temperature_C);
@@ -38,6 +37,7 @@ static void TaskPeriodic_1s(void* p)
     {
         xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(1000));
 
+        // No tasks at the moment
     }
 }
 
@@ -71,8 +71,8 @@ int main()
                 4,
                 nullptr);
 
-    xTaskCreate(TaskPeriodic_5s,
-                "TaskPeriodic_5s",
+    xTaskCreate(TaskPeriodic_60s,
+                "TaskPeriodic_60s",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
                 3,

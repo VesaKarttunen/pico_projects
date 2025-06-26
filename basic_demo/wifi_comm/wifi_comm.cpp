@@ -3,13 +3,14 @@
 
 // Local-project
 #include "app_command/app_command.hpp"
+#include "app_feedback/app_feedback.hpp"
 
 // Pico-SDK
 #include "pico/cyw43_arch.h"
 
 // lwIP
 #include "lwipopts.h"
-// Preven clan-format reordering
+// Prevent clan-format reordering
 #include "lwip/sockets.h"
 #include "lwip/sys.h"
 
@@ -32,11 +33,11 @@ static void TaskReceiveComm(void* p)
 
     while (true)
     {
-        std::array<char, 64> message = {};
+        std::array<char, 64> command_buffer = {};
 
         int count_bytes_received = lwip_read(socket,
-                                             message.data(),
-                                             sizeof(message));
+                                             command_buffer.data(),
+                                             sizeof(command_buffer));
 
         if (count_bytes_received <= 0)
         {
@@ -45,7 +46,7 @@ static void TaskReceiveComm(void* p)
         }
         else
         {
-            AppCommand::ProcessCommand(message.data());
+            AppCommand::ProcessCommand(command_buffer.data());
         }
     }
 
@@ -63,13 +64,13 @@ static void TaskSendComm(void* p)
 
     while (true)
     {
-        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(2000));
+        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(1000));
 
-        std::string_view message = "Hello world";
+        FeedbackFrame feedback_frame = AppFeedback::GetData();
 
         int count_bytes_sent = lwip_write(socket,
-                                          message.data(),
-                                          message.size());
+                                          &feedback_frame,
+                                          sizeof(feedback_frame));
 
         if (count_bytes_sent <= 0)
         {
