@@ -17,7 +17,7 @@ target_link_libraries(basic_demo
 
 if(NOT (WIFI_SSID AND WIFI_PASSWORD))
     message("Wi-Fi SSID and password missing from command line arguments\n")
-    message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> in cmake configuration call\n")
+    message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> in cmake configuration step\n")
 endif()
 
 target_compile_definitions(basic_demo

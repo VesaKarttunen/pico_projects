@@ -40,13 +40,9 @@ static void TaskReceiveComm(void* p)
             printf("Reading from the TCP socket failed. Closing the socket.\n");
             break;
         }
-        else if (static_cast<uint32_t>(count_bytes_received) == sizeof(message))
-        {
-            printf("Received message: %s\n", message.data());
-        }
         else
         {
-            printf("Received less bytes than expected from the socket. Discard message.\n");
+            printf("Received message: %s\n", message.data());
         }
     }
 
@@ -77,11 +73,6 @@ static void TaskSendComm(void* p)
             printf("Writing into the TCP socket failed. Closing the socket.\n");
             break;
         }
-        else if (static_cast<unsigned>(count_bytes_sent) < message.size())
-        {
-            printf("Wrote less bytes than expected into the socket\n");
-            break;
-        }
     }
 
     lwip_close(socket);
@@ -93,47 +84,24 @@ static void TaskCreateSocket(void* p)
     (void)p;
 
     int socket_listening = lwip_socket(AF_INET, SOCK_STREAM, 0);
-    bool is_error        = socket_listening < 0;
-
-    if (is_error)
-    {
-        printf("Creating listening socket failed\n");
-        return;
-    }
 
     sockaddr_in address     = {};
     address.sin_family      = AF_INET;
     address.sin_port        = htons(f_socket_port);
     address.sin_addr.s_addr = INADDR_ANY;
 
-    int status_bind = lwip_bind(socket_listening,
-                                reinterpret_cast<sockaddr*>(&address),
-                                sizeof(address));
+    lwip_bind(socket_listening,
+              reinterpret_cast<sockaddr*>(&address),
+              sizeof(address));
 
-    is_error = status_bind < 0;
-
-    if (is_error)
-    {
-        printf("Binding socket failed\n");
-        return;
-    }
-
-    int status_listen = lwip_listen(socket_listening, 0);
-    is_error          = status_listen < 0;
-
-    if (is_error)
-    {
-        printf("Socket failed to start listening incoming connection\n");
-        return;
-    }
+    lwip_listen(socket_listening, 0);
 
     while (true)
     {
         int socket_new = lwip_accept(socket_listening, nullptr, nullptr);
-        is_error       = socket_new < 0;
 
         // Successful new socket connection
-        if (!is_error)
+        if (socket_new >= 0)
         {
             printf("New socket connection accepted\n");
 
@@ -149,10 +117,6 @@ static void TaskCreateSocket(void* p)
                            &socket_new,
                            DEFAULT_THREAD_STACKSIZE,
                            2);
-        }
-        else
-        {
-            printf("Socket failed to accept incoming connection\n");
         }
     }
 }
@@ -182,7 +146,7 @@ void WifiComm::Init()
     }
     else
     {
-        printf("Wi-Fi connection failed\n");
+        printf("Wi-Fi connection failed with error code: %i\n", error_code);
     }
 
     printf("Starting TCP socket server at:\n");
