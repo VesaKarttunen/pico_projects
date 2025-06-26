@@ -38,9 +38,6 @@ static void TaskPeriodic_1s(void* p)
     {
         xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(1000));
 
-        static bool toggle;
-        toggle = !toggle;
-        Led::SetState(toggle);
     }
 }
 

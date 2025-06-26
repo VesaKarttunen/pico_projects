@@ -2,6 +2,7 @@ add_executable(basic_demo
     led/led.cpp
     temperature/temperature.cpp
     wifi_comm/wifi_comm.cpp
+    app_command/app_command.cpp
     main.cpp)
 
 target_include_directories(basic_demo

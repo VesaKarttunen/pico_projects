@@ -1,6 +1,9 @@
 // Own
 #include "wifi_comm.hpp"
 
+// Local-project
+#include "app_command/app_command.hpp"
+
 // Pico-SDK
 #include "pico/cyw43_arch.h"
 
@@ -42,7 +45,7 @@ static void TaskReceiveComm(void* p)
         }
         else
         {
-            printf("Received message: %s\n", message.data());
+            AppCommand::ProcessCommand(message.data());
         }
     }
 

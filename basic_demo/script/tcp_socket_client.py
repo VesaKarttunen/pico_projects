@@ -15,7 +15,7 @@ def GetUserMessageToSend():
 wait_keyboard_thread = threading.Thread(target=GetUserMessageToSend, daemon=True)
 wait_keyboard_thread.start()
 
-ip_address_pico  = "192.168.101.197"
+ip_address_pico  = "192.168.101.173"
 port_socket_pico = 1234
 
 # Connect TCP socket with configured settings
@@ -29,7 +29,7 @@ def ReceiveDataFromTcpSocket():
 
         # Convert received raw bits to actual message
         message = struct.unpack("<11s", data_received_raw)
-        print("Received message from Pico: ", message)
+
 
 # Create and start the thread
 receive_feedback_thread = threading.Thread(target=ReceiveDataFromTcpSocket, daemon=True)
