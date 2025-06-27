@@ -7,7 +7,6 @@
 // STD
 #include <cstdio>
 
-
 void AppCommand::ProcessCommand(std::string_view command)
 {
     if (command == "led_on")
@@ -20,6 +19,7 @@ void AppCommand::ProcessCommand(std::string_view command)
     }
     else
     {
-        printf("Unknown command %s use led_on and led_off to control led\n", command);
+        printf("Unknown command: %s\n", command);
+        printf("Use 'led_on' and 'led_off' to control the LED\n", command);
     }
 }
