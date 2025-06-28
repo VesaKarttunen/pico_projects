@@ -19,7 +19,7 @@ void AppCommand::ProcessCommand(std::string_view command)
     }
     else
     {
-        printf("Unknown command: %s\n", command.data());
-        printf("Use 'led_on' or 'led_off' to control the LED\n", command);
+        std::printf("Unknown command: %s\n", command.data());
+        std::printf("Use 'led_on' or 'led_off' to control the LED\n");
     }
 }

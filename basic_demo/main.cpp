@@ -23,7 +23,7 @@ static void TaskPeriodic_60s(void* p)
         xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(60'000));
 
         const float pcb_temperature_C = Temperature::GetPcbTemperature_C();
-        printf("PCB temperature = %.02f C\n", pcb_temperature_C);
+        std::printf("PCB temperature = %.2f C\n", pcb_temperature_C);
     }
 }
 
