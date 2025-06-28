@@ -6,17 +6,17 @@ import threading
 import time
 import queue
 
-queue_command = queue.Queue()
-queue_plot_data    = queue.Queue()
+queue_command  = queue.Queue()
+queue_feedback = queue.Queue()
 
 def GetUserCommandToSend():
     while True:
-        command_to_send = input("Type command...\n")
-        queue_command.put(command_to_send)
+        command = input("Type command...\n")
+        queue_command.put(command)
 
 # Create and start the thread
-get_user_command_thread = threading.Thread(target=GetUserCommandToSend, daemon=True)
-get_user_command_thread.start()
+thread_get_user_command = threading.Thread(target=GetUserCommandToSend, daemon=True)
+thread_get_user_command.start()
 
 ip_address_pico  = "192.168.101.197"
 port_socket_pico = 1234
@@ -25,30 +25,28 @@ port_socket_pico = 1234
 socket_pico = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket_pico.connect((ip_address_pico, port_socket_pico))
 
-def ReceiveDataFromTcpSocket():
+def ReceiveFeedbackFromSocket():
     while True:
         count_recv_bytes = 8
         data_raw = socket_pico.recv(count_recv_bytes)
-
-        # Convert received raw bits to actual data types
         data_converted = struct.unpack("<2f", data_raw)
-        queue_plot_data.put(data_converted)
+        queue_feedback.put(data_converted)
 
 # Create and start the thread
-receive_feedback_thread = threading.Thread(target=ReceiveDataFromTcpSocket, daemon=True)
-receive_feedback_thread.start()
+thread_receive_feedback = threading.Thread(target=ReceiveFeedbackFromSocket, daemon=True)
+thread_receive_feedback.start()
 
-def SendDataToTcpSocket():
+def SendCommandToSocket():
     while True:
         if (not queue_command.empty()):
-            message = queue_command.get()
-            data_send = struct.pack("<64s", message.encode())
-            socket_pico.sendall(data_send)
+            command  = queue_command.get()
+            data_raw = struct.pack("<64s", command.encode())
+            socket_pico.sendall(data_raw)
         else:
             time.sleep(0.1)
 
-send_command_thread = threading.Thread(target=SendDataToTcpSocket, daemon=True)
-send_command_thread.start()
+thread_send_command = threading.Thread(target=SendCommandToSocket, daemon=True)
+thread_send_command.start()
 
 # Plot feedback data received from Pico
 fig, axis = plt.subplots(1, 1)
@@ -56,6 +54,7 @@ fig.set_tight_layout(True)
 line_object = axis.plot([], [])
 axis.grid()
 
+plt.title("Feedback data received from Pico")
 plt.xlabel("Time [s]")
 plt.ylabel("Temperature [C]")
 
@@ -64,15 +63,15 @@ y_axis_data = []
 
 # Update function for animation
 def UpdateAnimation(frame_number):
-    while (not queue_plot_data.empty()):
-        time_s, temperature_C = queue_plot_data.get()
+    while (not queue_feedback.empty()):
+        time_s, temperature_C = queue_feedback.get()
         x_axis_data.append(time_s)
         y_axis_data.append(temperature_C)
 
-    if x_axis_data:
+    if len(x_axis_data) >= 2:
         axis.relim()
         axis.autoscale_view()
-        axis.set_xlim(x_axis_data[0], (x_axis_data[-1] + 1.0e-3))
+        axis.set_xlim(x_axis_data[0], x_axis_data[-1])
         line_object[0].set_data(x_axis_data, y_axis_data)
 
     return line_object
