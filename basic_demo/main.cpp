@@ -57,6 +57,9 @@ int main()
     stdio_init_all();
     Temperature::Init();
 
+    // Short delay to give time to connect UART after reboot
+    sleep_ms(5000u);
+
     xTaskCreate(TaskInit,
                 "TaskInit",
                 configMINIMAL_STACK_SIZE,

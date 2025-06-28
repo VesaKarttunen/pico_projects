@@ -143,7 +143,7 @@ void WifiComm::Init()
 
     if (status == PICO_OK)
     {
-        std::printf("Wi-Fi connected successfully\n");
+        std::printf("Wi-Fi connected successfully!\n");
     }
     else
     {
@@ -151,8 +151,9 @@ void WifiComm::Init()
     }
 
     std::string_view ip_address = ip4addr_ntoa(netif_ip4_addr(netif_list));
-    std::printf("Starting TCP socket server at:\n");
-    std::printf("IP: %s; Port %u\n", ip_address.data(), f_socket_port);
+    std::printf("Starting TCP socket server:\n");
+    std::printf("IP:   %s\n", ip_address.data());
+    std::printf("Port: %u\n", f_socket_port);
 
     sys_thread_new("TaskCreateSocket",
                    TaskCreateSocket,
