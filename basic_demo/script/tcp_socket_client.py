@@ -18,7 +18,7 @@ def GetUserCommandToSend():
 thread_get_user_command = threading.Thread(target=GetUserCommandToSend, daemon=True)
 thread_get_user_command.start()
 
-ip_address_pico  = "192.168.101.197"
+ip_address_pico  = "192.168.101.173"
 port_socket_pico = 1234
 
 # Connect TCP socket with configured settings

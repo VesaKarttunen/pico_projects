@@ -1,4 +1,5 @@
 // Local project
+#include "led/led.hpp"
 #include "temperature/temperature.hpp"
 #include "wifi_comm/wifi_comm.hpp"
 
@@ -24,6 +25,20 @@ static void TaskPeriodic_60s(void* p)
 
         const float pcb_temperature_C = Temperature::GetPcbTemperature_C();
         std::printf("PCB temperature = %.2f C\n", pcb_temperature_C);
+    }
+}
+
+static void TaskPeriodic_100ms(void* p)
+{
+    (void)p;
+
+    TickType_t ticks_previous_wake = xTaskGetTickCount();
+
+    while (true)
+    {
+        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(100));
+
+        g_led.TaskPeriodic_100ms();
     }
 }
 
@@ -79,6 +94,13 @@ int main()
                 configMINIMAL_STACK_SIZE,
                 nullptr,
                 3,
+                nullptr);
+
+    xTaskCreate(TaskPeriodic_100ms,
+                "TaskPeriodic_100ms",
+                configMINIMAL_STACK_SIZE,
+                nullptr,
+                4,
                 nullptr);
 
     vTaskStartScheduler();
