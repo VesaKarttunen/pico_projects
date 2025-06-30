@@ -32,17 +32,10 @@ jobs:
           cmake --build .\build
 
       - name: Create source file list for static analysis and format checks
-        run: |
-          $TargetFolder = ".\basic_demo"
-          $OutputFile   = ".\cpplist.txt"
-
-          Get-ChildItem -Path $TargetFolder -Recurse -File |
-                Where-Object { $_.Extension -eq ".cpp" -or $_.Extension -eq ".hpp" -or $_.Extension -eq ".c" -or $_.Extension -eq ".h" } |
-                Select-Object -ExpandProperty FullName |
-                Out-File -FilePath $OutputFile -Encoding UTF8 -Force
+        run: python .\cicd_pipeline\script\generate_source_file_list.py .\ source_file_list.txt
 
       - name: Check code style with clang-format
-        run: clang-format --Werror --dry-run --verbose --style=file --files=cpplist.txt
+        run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
       # Disable clang-tidy check temporarily since code is not yet compiliant
       #- name: Run static analysis with clang-tidy
@@ -52,4 +45,12 @@ jobs:
         run: |
           # Runner has another cppcheck.exe installed that is broken. To prevent calling it, add the correct version first in the Path.
           $env:Path = "C:\Program Files\Cppcheck;" + $env:Path
-          cppcheck --enable=all --suppress=missingIncludeSystem --suppress=missingInclude --file-list=cpplist.txt --error-exitcode=1
+          cppcheck `
+            --check-level=exhaustive `
+            --enable=all `
+            --inconclusive `
+            --suppress=missingIncludeSystem `
+            --suppress=missingInclude `
+            --inline-suppr `
+            --file-list=source_file_list.txt `
+            --error-exitcode=1
