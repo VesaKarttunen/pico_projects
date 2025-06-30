@@ -21,13 +21,17 @@ void AppCommand::ProcessCommand(std::string_view command)
     {
         g_led.SetLedMode(LedMode::BLINKING);
     }
-    else if (command == "led_period_5s")
+    else if (command == "led_blinking_period_5s")
     {
         g_led.SetBlinkingPeriod_s(5.0);
     }
     else
     {
         std::printf("Unknown command: %s\n", command.data());
-        std::printf("Use 'led_on' or 'led_off' to control the LED\n");
+        std::printf("Available commands are:\n");
+        std::printf("led_off\n");
+        std::printf("led_on\n");
+        std::printf("led_blink\n");
+        std::printf("led_blinking_period_5s\n");
     }
 }
