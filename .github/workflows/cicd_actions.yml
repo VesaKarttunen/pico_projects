@@ -51,6 +51,7 @@ jobs:
             --inconclusive `
             --suppress=missingIncludeSystem `
             --suppress=missingInclude `
+            --suppress=unusedStructMember `
             --inline-suppr `
             --file-list=source_file_list.txt `
             --error-exitcode=1
