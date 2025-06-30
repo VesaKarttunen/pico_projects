@@ -88,7 +88,7 @@ set(CompilerWarningsAllGnu
 set(CompilerWarningsAllClang
     -fdiagnostics-color
     -Weverything
-    #-Werror
+    -Werror
     -pedantic
     -pedantic-errors
     -Wno-c++98-compat

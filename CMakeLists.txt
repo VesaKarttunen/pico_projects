@@ -20,6 +20,6 @@ pico_sdk_init()
 set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/FreeRTOS-Kernel)
 include(cmake/FreeRTOS_Kernel_import.cmake)
 
-include(cmake/compiler_warnings_options.cmake)
+include(cmake/compiler_warning_options.cmake)
 
 add_subdirectory(basic_demo)

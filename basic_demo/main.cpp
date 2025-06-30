@@ -23,7 +23,7 @@ static void TaskPeriodic_60s(void* p)
     {
         xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(60'000));
 
-        const float pcb_temperature_C = Temperature::GetPcbTemperature_C();
+        double pcb_temperature_C = static_cast<double>(Temperature::GetPcbTemperature_C());
         std::printf("PCB temperature = %.2f C\n", pcb_temperature_C);
     }
 }
@@ -52,7 +52,7 @@ static void TaskPeriodic_1s(void* p)
     {
         xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(1000));
 
-        // No tasks at the moment
+        // No work at the moment
     }
 }
 
@@ -82,25 +82,25 @@ int main()
                 5,
                 nullptr);
 
+    xTaskCreate(TaskPeriodic_100ms,
+                "TaskPeriodic_100ms",
+                configMINIMAL_STACK_SIZE,
+                nullptr,
+                4,
+                nullptr);
+
     xTaskCreate(TaskPeriodic_1s,
                 "TaskPeriodic_1s",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
-                4,
+                3,
                 nullptr);
 
     xTaskCreate(TaskPeriodic_60s,
                 "TaskPeriodic_60s",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
-                3,
-                nullptr);
-
-    xTaskCreate(TaskPeriodic_100ms,
-                "TaskPeriodic_100ms",
-                configMINIMAL_STACK_SIZE,
-                nullptr,
-                4,
+                2,
                 nullptr);
 
     vTaskStartScheduler();
