@@ -21,13 +21,13 @@ jobs:
           winget upgrade --id Kitware.CMake -e --accept-package-agreements --accept-source-agreements
           $url = "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi.zip"
           $pathToFile = "${{runner.temp}}\arm-gnu.zip"
-          $extractPath = "${{github.workspace}}\arm-gnu"
+          $extractPath = "${{github.workspace}}\toolchain\arm-gnu"
           Invoke-WebRequest -Uri $url -OutFile $pathToFile
           Expand-Archive -Path $pathToFile -DestinationPath $extractPath -Force
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
-          $env:Path ="${{github.workspace}}\arm-gnu\bin;" + $env:Path
+          $env:Path ="${{github.workspace}}\toolchain\arm-gnu\bin;" + $env:Path
           cmake -G "Ninja" -S .\ -B .\build
           cmake --build .\build
 

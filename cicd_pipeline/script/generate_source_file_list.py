@@ -25,7 +25,7 @@ if __name__ == "__main__":
     search_root_directory = sys.argv[1]
     result_file_name      = sys.argv[2]
 
-    excluded_subdirectories = ("build", "FreeRTOS-Kernel", "pico-sdk")
+    excluded_subdirectories = ("build", "FreeRTOS-Kernel", "pico-sdk","toolchain")
     included_file_extension = (".cpp", ".hpp", ".h")
 
     source_files = GenerateSourceFileList(search_root_directory,
