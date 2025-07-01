@@ -43,7 +43,7 @@ static void TaskReceiveComm(void* p)
             std::printf("Reading from the TCP socket failed. Closing the socket.\n");
             break;
         }
-        else
+        else // NOLINT(*else-after-return)
         {
             AppCommand::ProcessCommand(command_buffer.data());
         }
@@ -152,7 +152,7 @@ void WifiComm::Init()
 
     std::string_view ip_address = ip4addr_ntoa(netif_ip4_addr(netif_list));
     std::printf("Starting TCP socket server:\n");
-    std::printf("IP:   %s\n", ip_address.data());
+    std::printf("IP:   %s\n", ip_address.data()); // NOLINT(*stringview-data-usage)
     std::printf("Port: %u\n", f_socket_port);
 
     sys_thread_new("TaskCreateSocket",

@@ -3,6 +3,7 @@
 Checks: >
   bugprone-*,
   -bugprone-exception-escape,
+  -bugprone-macro-parentheses,
 
   cert-*,
   -cert-err58-cpp,
@@ -11,18 +12,23 @@ Checks: >
 
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-avoid-non-const-global-variables,
   -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-type-vararg,
 
   hicpp-*,
   -hicpp-use-auto,
   -hicpp-uppercase-literal-suffix,
+  -hicpp-vararg,
 
   misc-*,
+  -misc-const-correctness,
   -misc-include-cleaner,
   -misc-use-anonymous-namespace,
 
   modernize-*,
   -modernize-use-nodiscard,
+  -modernize-use-std-print,
   -modernize-use-trailing-return-type,
 
   performance-*,
@@ -31,14 +37,13 @@ Checks: >
   portability-*,
 
   readability-*,
+  -readability-identifier-length,
   -readability-magic-numbers,
   -readability-redundant-inline-specifier,
 
 WarningsAsErrors: "*"
 
 CheckOptions:
-- key:   cppcoreguidelines-avoid-non-const-global-variables.AllowInternalLinkage
-  value: true
 - key:   bugprone-misplaced-widening-cast.CheckImplicitCasts
   value: true
 - key:   modernize-use-auto.MinTypeNameLength
@@ -49,24 +54,20 @@ CheckOptions:
   value: "f;u;L;uL;uLL"
 - key:   readability-identifier-naming.ClassCase
   value: "CamelCase"
-- key:   readability-identifier-naming.ClassSuffix
-  value: _t
 - key:   readability-identifier-naming.PrivateMemberCase
   value: lower_case
 - key:   readability-identifier-naming.PrivateMemberIgnoredRegexp
-  value: ".*(_J|_N|_W|_kW)$"
+  value: ".*(_C|_s|_ms|_V)$"
 - key:   readability-identifier-naming.PrivateMemberPrefix
   value: m_
 - key:   readability-identifier-naming.EnumCase
   value: CamelCase
-- key:   readability-identifier-naming.EnumSuffix
-  value: _t
 - key:   readability-identifier-naming.EnumConstantCase
   value: UPPER_CASE
 - key:   readability-identifier-naming.FunctionCase
   value: CamelCase
 - key:   readability-identifier-naming.FunctionIgnoredRegexp
-  value: ".*(_J|_m|_N|_s|_W)$"
+  value: ".*(_C|_s|_ms|_1s|_100ms|_60s|_V)$"
 - key:   readability-identifier-naming.MacroDefinitionCase
   value: UPPER_CASE
 - key:   readability-identifier-naming.NamespaceCase
@@ -74,19 +75,15 @@ CheckOptions:
 - key:   readability-identifier-naming.ParameterCase
   value: lower_case
 - key:   readability-identifier-naming.ParameterIgnoredRegexp
-  value: ".*(_J|_N|_W|_kW)$"
+  value: ".*(_C|_s|_ms|_V)$"
 - key:   readability-identifier-naming.StructCase
   value: CamelCase
-- key:   readability-identifier-naming.StructSuffix
-  value: _t
 - key:   readability-identifier-naming.TypeAliasCase
   value: CamelCase
-- key:   readability-identifier-naming.TypeAliasSuffix
-  value: _t
 - key:   readability-identifier-naming.VariableCase
   value: lower_case
 - key:   readability-identifier-naming.VariableIgnoredRegexp
-  value: ".*(_J|_N|_W|_kW)$"
+  value: ".*(_C|_s|_ms|_V)$"
 
 # By default, clang-tidy does not show errors from any header files. Note that the regex
 # filter below is inclusive. Thus, you need to filter IN what you want to see.

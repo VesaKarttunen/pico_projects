@@ -27,6 +27,7 @@ void AppCommand::ProcessCommand(std::string_view command)
     }
     else
     {
+        // NOLINTNEXTLINE(*stringview-data-usage)
         std::printf("Unknown command: %s\n", command.data());
         std::printf("Available commands are:\n");
         std::printf("led_off\n");
