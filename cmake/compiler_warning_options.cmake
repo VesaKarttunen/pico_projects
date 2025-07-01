@@ -93,8 +93,10 @@ set(CompilerWarningsAllClang
     -pedantic-errors
     -Wno-c++98-compat
     -Wno-c++98-compat-pedantic
+    -Wno-missing-noreturn
     -Wno-nonportable-system-include-path
-    -Wno-padded)
+    -Wno-padded
+    -Wno-unsafe-buffer-usage-in-libc-call)
 
 # Choose the applied set of compiler warnings based on the selected compiler.
 # This is done because GNU and Clang support somewhat different warnings.
