@@ -37,9 +37,9 @@ jobs:
       - name: Check code style with clang-format
         run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
-      # Disable clang-tidy check temporarily since code is not yet compiliant
+      # TODO: Add Arm-Clang compiler build into pipeline and enable the clang-tidy check after that
       #- name: Run static analysis with clang-tidy
-      #  run: python ".\cicd_pipeline\script\run-clang-tidy.py" -quiet -config-file ".clang-tidy" -p ".\build" -source-filter "^(?!.*?pico-sdk).*$"
+      #  run: python .\cicd_pipeline\script\run-clang-tidy.py -quiet -config-file .clang-tidy -p .\build -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
 
       - name: Run static analysis with Cppcheck
         run: |
