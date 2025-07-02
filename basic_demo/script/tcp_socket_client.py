@@ -12,7 +12,8 @@ queue_feedback = queue.Queue()
 def GetUserCommandToSend():
     while True:
         command = input("Type command...\n")
-        queue_command.put(command)
+        split_command = command.split(";")[0], float(command.split(";")[1])
+        queue_command.put(split_command)
 
 # Create and start the thread
 thread_get_user_command = threading.Thread(target=GetUserCommandToSend, daemon=True)
