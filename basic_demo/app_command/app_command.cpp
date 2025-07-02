@@ -7,32 +7,38 @@
 // STD
 #include <cstdio>
 
-void AppCommand::ProcessCommand(std::string_view command)
+using CommandHookFunc = void (*)(float);
+
+struct CommandHookMap
 {
-    if (command == "led_on")
+    std::string_view name;
+    CommandHookFunc hook_function;
+};
+
+// clang-format off
+static std::array<CommandHookMap, 2> command_conf{
+    CommandHookMap{"SetLedMode",        [](float mode)    { g_led.SetLedMode(static_cast<LedMode>(mode)); }},
+    CommandHookMap{"SetBlinkingPeriod", [](float period_s){ g_led.SetBlinkingPeriod_s(period_s); }}
+};
+// clang-format on
+
+void AppCommand::ProcessCommand(const CommandFrame& requested_command)
+{
+    bool found_command = false;
+
+    for (auto available_command : command_conf)
     {
-        g_led.SetLedMode(LedMode::ON);
+        std::string_view requested_command_name = requested_command.name.data();
+
+        if (available_command.name == requested_command_name)
+        {
+            available_command.hook_function(requested_command.arqument);
+            found_command = true;
+        }
     }
-    else if (command == "led_off")
-    {
-        g_led.SetLedMode(LedMode::OFF);
-    }
-    else if (command == "led_blink")
-    {
-        g_led.SetLedMode(LedMode::BLINKING);
-    }
-    else if (command == "led_blinking_period_5s")
-    {
-        g_led.SetBlinkingPeriod_s(5.0);
-    }
-    else
+    if (!found_command)
     {
         // NOLINTNEXTLINE(*stringview-data-usage)
-        std::printf("Unknown command: %s\n", command.data());
-        std::printf("Available commands are:\n");
-        std::printf("led_off\n");
-        std::printf("led_on\n");
-        std::printf("led_blink\n");
-        std::printf("led_blinking_period_5s\n");
+        std::printf("Unknown command: %s\n", requested_command.name.data());
     }
 }

@@ -39,8 +39,8 @@ thread_receive_feedback.start()
 def SendCommandToSocket():
     while True:
         if (not queue_command.empty()):
-            command  = queue_command.get()
-            data_raw = struct.pack("<64s", command.encode())
+            name,arqument  = queue_command.get()
+            data_raw = struct.pack("<64s1f", name.encode(),arqument)
             socket_pico.sendall(data_raw)
         else:
             time.sleep(0.1)

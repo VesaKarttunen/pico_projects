@@ -32,11 +32,11 @@ static void TaskReceiveComm(void* p)
 
     while (true)
     {
-        std::array<char, 64> command_buffer = {};
+        CommandFrame command_frame = {};
 
         int count_bytes_received = lwip_read(socket,
-                                             command_buffer.data(),
-                                             sizeof(command_buffer));
+                                             &command_frame,
+                                             sizeof(command_frame));
 
         if (count_bytes_received <= 0)
         {
@@ -45,7 +45,7 @@ static void TaskReceiveComm(void* p)
         }
         else // NOLINT(*else-after-return)
         {
-            AppCommand::ProcessCommand(command_buffer.data());
+            AppCommand::ProcessCommand(command_frame);
         }
     }
 
