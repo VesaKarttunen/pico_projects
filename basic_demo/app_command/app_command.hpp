@@ -5,7 +5,7 @@
 struct CommandFrame
 {
     std::array<char, 64> name;
-    float arqument;
+    float argument;
 };
 
 class AppCommand

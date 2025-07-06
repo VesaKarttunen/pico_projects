@@ -16,7 +16,7 @@ void AppCommand::ProcessCommand(const CommandFrame& requested_command)
 
         if (available_command.name == requested_command_name)
         {
-            available_command.hook_func(requested_command.arqument);
+            available_command.hook_func(requested_command.argument);
             found_valid_command = true;
         }
     }
