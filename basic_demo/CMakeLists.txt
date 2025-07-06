@@ -1,5 +1,6 @@
 set(SourceFiles
     app_command/app_command.cpp
+    app_command/command_conf.cpp
     app_feedback/app_feedback.cpp
     led/led.cpp
     temperature/temperature.cpp
