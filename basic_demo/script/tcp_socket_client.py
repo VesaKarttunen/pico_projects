@@ -9,24 +9,31 @@ import queue
 queue_command  = queue.Queue()
 queue_feedback = queue.Queue()
 
-supported_str_args = {"FALSE"   : 0.0,
-                      "TRUE"    : 1.0,
-                      "OFF"     : 0.0,
-                      "ON"      : 1.0,
-                      "BLINKING": 2.0}
+supported_command_names = {"setledmode"            : "SetLedMode",
+                           "setledblinkingperiod_s": "SetLedBlinkingPeriod_s"}
+
+supported_str_args      = {"FALSE"   : 0.0,
+                           "TRUE"    : 1.0,
+                           "OFF"     : 0.0,
+                           "ON"      : 1.0,
+                           "BLINKING": 2.0}
 
 def GetUserCommandToSend():
     while True:
+        #Initialize to None to avoid UnboundLocalError if first input is invalid
+        command_parsed = None
+
         command = input("Type command...\n")
 
         command_tokens = command.replace(" ", "").split(";")
         count_tokens_in_valid_command = 2
 
         if len(command_tokens) == count_tokens_in_valid_command:
-            command_name = command_tokens[0]
-            argument_str = command_tokens[1]
+            formatted_command_name = command_tokens[0].lower()
+            argument_str           = command_tokens[1]
 
-            if command_name.isidentifier():
+            if formatted_command_name in supported_command_names:
+                command_name = supported_command_names[formatted_command_name]
                 if argument_str in supported_str_args:
                     argument_float = supported_str_args[argument_str]
                     command_parsed = (command_name, argument_float)
@@ -47,7 +54,7 @@ def GetUserCommandToSend():
 thread_get_user_command = threading.Thread(target=GetUserCommandToSend, daemon=True)
 thread_get_user_command.start()
 
-ip_address_pico  = "192.168.101.197"
+ip_address_pico  = "192.168.101.173"
 port_socket_pico = 1234
 
 # Connect TCP socket with configured settings
