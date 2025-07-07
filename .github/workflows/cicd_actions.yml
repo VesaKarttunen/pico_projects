@@ -17,13 +17,27 @@ jobs:
 
       - name: Install missing SW tools
         run: |
+          # Cppcheck
           choco install cppcheck
+
+          # CMake
           winget upgrade --id Kitware.CMake -e --accept-package-agreements --accept-source-agreements
-          $url = "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi.zip"
-          $pathToFile = "${{runner.temp}}\arm-gnu.zip"
-          $extractPath = "${{github.workspace}}\toolchain\arm-gnu"
-          Invoke-WebRequest -Uri $url -OutFile $pathToFile
-          Expand-Archive -Path $pathToFile -DestinationPath $extractPath -Force
+
+          # ARM GNU toolchain for 32-bit bare-metal target for Windows 64-bit host
+          $download_url = "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi.zip"
+          $path_zip     = ".\arm-gnu.zip"
+          Invoke-WebRequest $download_url -OutFile $path_zip
+
+          $path_extract = ".\toolchain\arm-gnu"
+          Expand-Archive -Path $path_zip -DestinationPath $path_extract
+
+          # # ARM Clang (LLVM) toolchain for 32-bit bare-metal target for Windows 64-bit host
+          $download_url = "https://github.com/arm/arm-toolchain/releases/download/release-20.1.0-ATfE/ATfE-20.1.0-Windows-x86_64.zip"
+          $path_zip     = ".\arm-clang.zip"
+          Invoke-WebRequest $download_url -OutFile $path_zip
+
+          $path_extract = ".\toolchain\arm-clang"
+          Expand-Archive -Path $path_zip -DestinationPath $path_extract
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
