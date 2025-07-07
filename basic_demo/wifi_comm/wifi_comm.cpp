@@ -18,7 +18,6 @@
 #include "task.h"
 
 // STD
-#include <array>
 #include <cstdio>
 #include <string_view>
 

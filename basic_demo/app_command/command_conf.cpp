@@ -9,7 +9,7 @@
 
 static void SetLedMode(float mode)
 {
-    g_led.SetLedMode(static_cast<LedMode>(mode));
+    g_led.SetMode(static_cast<LedMode>(mode));
 }
 
 static void SetLedBlinkingPeriod_s(float period_s)
@@ -19,7 +19,7 @@ static void SetLedBlinkingPeriod_s(float period_s)
 
 // clang-format off
 // NOLINTNEXTLINE(*interfaces-global-init)
-static std::array<CommandHookMap, 2> command_conf{{
+static std::array<CommandHookMap, 2> supported_commands{{
     {.name      = "SetLedMode",
      .hook_func = SetLedMode},
     {.name      = "SetLedBlinkingPeriod_s",
@@ -29,5 +29,5 @@ static std::array<CommandHookMap, 2> command_conf{{
 
 std::span<CommandHookMap> CommandConf::GetSupportedCommands()
 {
-    return command_conf;
+    return supported_commands;
 }

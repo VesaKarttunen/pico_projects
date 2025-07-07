@@ -20,6 +20,7 @@ void AppCommand::ProcessCommand(const CommandFrame& requested_command)
             found_valid_command = true;
         }
     }
+
     if (!found_valid_command)
     {
         // NOLINTNEXTLINE(*stringview-data-usage)

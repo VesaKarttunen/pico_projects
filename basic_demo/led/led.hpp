@@ -10,15 +10,15 @@ enum struct LedMode
 class Led
 {
   public:
-    void SetLedMode(LedMode mode);
+    void SetMode(LedMode mode);
     void SetBlinkingPeriod_s(float period_s);
     void TaskPeriodic_100ms();
 
   private:
-    LedMode m_mode      = LedMode::BLINKING;
-    bool m_toggle       = false;
-    int m_counter       = 0;
-    int m_counter_limit = 20;
+    LedMode m_mode            = LedMode::BLINKING;
+    bool m_led_state          = false;
+    float m_timer_s           = 0.0f;
+    float m_blinking_period_s = 1.0f;
 };
 
 extern Led g_led;
