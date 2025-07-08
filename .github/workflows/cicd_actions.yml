@@ -23,27 +23,32 @@ jobs:
           # CMake
           winget upgrade --id Kitware.CMake -e --accept-package-agreements --accept-source-agreements
 
+          // Create SW tool download directory
+          New-Item -Path .\download -ItemType Directory
+
           # ARM GNU toolchain for 32-bit bare-metal target for Windows 64-bit host
           $download_url = "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi.zip"
-          $path_zip     = ".\arm-gnu.zip"
+          $path_zip     = ".\download\arm-gnu.zip"
           Invoke-WebRequest $download_url -OutFile $path_zip
-
           $path_extract = ".\toolchain\arm-gnu"
-          Expand-Archive -Path $path_zip -DestinationPath $path_extract
+          Expand-Archive -Path $path_zip -DestinationPath $path_extract -Force
 
           # # ARM Clang (LLVM) toolchain for 32-bit bare-metal target for Windows 64-bit host
           $download_url = "https://github.com/arm/arm-toolchain/releases/download/release-20.1.0-ATfE/ATfE-20.1.0-Windows-x86_64.zip"
-          $path_zip     = ".\arm-clang.zip"
+          $path_zip     = ".\download\arm-clang.zip"
           Invoke-WebRequest $download_url -OutFile $path_zip
-
           $path_extract = ".\toolchain\arm-clang"
-          Expand-Archive -Path $path_zip -DestinationPath $path_extract
+          Expand-Archive -Path $path_zip -DestinationPath $path_extract -Force
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
-          $env:Path ="${{github.workspace}}\toolchain\arm-gnu\bin;" + $env:Path
-          cmake -G "Ninja" -S .\ -B .\build
-          cmake --build .\build
+          cmake -G "Ninja" -S .\ -B .\build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_gcc -D PICO_TOOLCHAIN_PATH=.\toolchain\arm-gnu
+          cmake --build .\build_gnu
+
+      - name: Build firmware with Arm-Clang toolchain
+        run: |
+          cmake -G "Ninja" -S .\ -B .\build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=.\toolchain\arm-clang
+          cmake --build .\build_clang
 
       - name: Create source file list for static analysis and format checks
         run: python .\cicd_pipeline\script\generate_source_file_list.py .\ source_file_list.txt
@@ -51,9 +56,8 @@ jobs:
       - name: Check code style with clang-format
         run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
-      # TODO: Add Arm-Clang compiler build into pipeline and enable the clang-tidy check after that
-      #- name: Run static analysis with clang-tidy
-      #  run: python .\cicd_pipeline\script\run-clang-tidy.py -quiet -config-file .clang-tidy -p .\build -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
+      - name: Run static analysis with clang-tidy
+        run: python .\cicd_pipeline\script\run-clang-tidy.py -quiet -config-file .clang-tidy -p .\build_clang -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
 
       - name: Run static analysis with Cppcheck
         run: |
