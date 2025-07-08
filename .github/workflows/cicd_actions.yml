@@ -47,7 +47,7 @@ jobs:
 
       - name: Build firmware with Arm-Clang toolchain
         run: |
-          cmake -G "Ninja" -S .\ -B .\build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=.\toolchain\arm-clang
+          cmake -G "Ninja" -S .\ -B .\build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=.\toolchain\arm-clang\ATfE-20.1.0-Windows-x86_64
           cmake --build .\build_clang
 
       - name: Create source file list for static analysis and format checks
