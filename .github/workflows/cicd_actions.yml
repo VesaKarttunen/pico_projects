@@ -42,7 +42,7 @@ jobs:
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
-          cmake -G "Ninja" -S .\ -B .\build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_gcc -D PICO_TOOLCHAIN_PATH=.\toolchain\arm-gnu
+          cmake -G "Ninja" -S .\ -B .\build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=.\toolchain\arm-gnu
           cmake --build .\build_gnu
 
       - name: Build firmware with Arm-Clang toolchain
