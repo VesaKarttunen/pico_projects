@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2025
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -17,19 +17,40 @@ jobs:
 
       - name: Install missing SW tools
         run: |
-          choco install cppcheck
-          winget upgrade --id Kitware.CMake -e --accept-package-agreements --accept-source-agreements
-          $url = "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi.zip"
-          $pathToFile = "${{runner.temp}}\arm-gnu.zip"
-          $extractPath = "${{github.workspace}}\toolchain\arm-gnu"
-          Invoke-WebRequest -Uri $url -OutFile $pathToFile
-          Expand-Archive -Path $pathToFile -DestinationPath $extractPath -Force
+          # Get Clang-format, Clang-tidy, Cppcheck and Ninja
+          sudo apt-get update
+          sudo apt-get install -y clang-format clang-tidy gcc-arm-none-eabi cppcheck ninja-build
+
+          # Create SW tool download directory
+          mkdir -p ./download
+
+          # ARM GNU toolchain for 32-bit bare-metal target for Linux 64-bit host
+          download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz"
+          path_tar="./download/arm-gnu.tar.xz"
+          wget "$download_url" -O "$path_tar"
+          path_extract="./toolchain/arm-gnu"
+          mkdir -p "$path_extract"
+          tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
+
+
+          # ARM Clang (LLVM) toolchain for 32-bit bare-metal target for Linux 64-bit host
+          download_url="https://github.com/arm/arm-toolchain/releases/download/release-20.1.0-ATfE/ATfE-20.1.0-Linux-x86_64.tar.xz"
+          path_tar="./download/arm-clang.tar.xz"
+          wget "$download_url" -O "$path_tar"
+          path_extract="./toolchain/arm-clang"
+          mkdir -p "$path_extract"
+          tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
-          $env:Path ="${{github.workspace}}\toolchain\arm-gnu\bin;" + $env:Path
-          cmake -G "Ninja" -S .\ -B .\build
-          cmake --build .\build
+          cmake -G Ninja -S ./ -B ./build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=${{ github.workspace }}/toolchain/arm-gnu
+          cmake --build ./build_gnu
+
+      - name: Build firmware with Arm-Clang toolchain
+        run: |
+          export PATH=./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64/bin:$PATH
+          cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=${{ github.workspace }}/toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64
+          cmake --build ./build_clang
 
       - name: Create source file list for static analysis and format checks
         run: python .\cicd_pipeline\script\generate_source_file_list.py .\ source_file_list.txt
@@ -37,21 +58,16 @@ jobs:
       - name: Check code style with clang-format
         run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
-      # TODO: Add Arm-Clang compiler build into pipeline and enable the clang-tidy check after that
-      #- name: Run static analysis with clang-tidy
-      #  run: python .\cicd_pipeline\script\run-clang-tidy.py -quiet -config-file .clang-tidy -p .\build -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
-
       - name: Run static analysis with Cppcheck
         run: |
           # Runner has another cppcheck.exe installed that is broken. To prevent calling it, add the correct version first in the Path.
-          $env:Path = "C:\Program Files\Cppcheck;" + $env:Path
-          cppcheck `
-            --check-level=exhaustive `
-            --enable=all `
-            --inconclusive `
-            --suppress=missingIncludeSystem `
-            --suppress=missingInclude `
-            --suppress=unusedStructMember `
-            --inline-suppr `
-            --file-list=source_file_list.txt `
+          cppcheck \
+            --check-level=exhaustive \
+            --enable=all \
+            --inconclusive \
+            --suppress=missingIncludeSystem \
+            --suppress=missingInclude \
+            --suppress=unusedStructMember \
+            --inline-suppr \
+            --file-list=source_file_list.txt \
             --error-exitcode=1
