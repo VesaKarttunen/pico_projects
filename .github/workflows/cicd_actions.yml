@@ -43,13 +43,12 @@ jobs:
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
-          cmake -G Ninja -S ./ -B ./build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=${{ github.workspace }}/toolchain/arm-gnu
+          cmake -G Ninja -S ./ -B ./build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=./toolchain/arm-gnu
           cmake --build ./build_gnu
 
       - name: Build firmware with Arm-Clang toolchain
         run: |
-          export PATH=./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64/bin:$PATH
-          cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=${{ github.workspace }}/toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64
+          cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64/bin
           cmake --build ./build_clang
 
       - name: Create source file list for static analysis and format checks
