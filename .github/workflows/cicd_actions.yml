@@ -19,7 +19,7 @@ jobs:
         run: |
           # Get Clang-format, Clang-tidy, Cppcheck and Ninja
           sudo apt-get update
-          sudo apt-get install -y clang-format clang-tidy clang-tools-20 gcc-arm-none-eabi cppcheck ninja-build
+          sudo apt-get install -y clang clang-format clang-tidy clang-tools gcc-arm-none-eabi cppcheck ninja-build
 
           # Create SW tool download directory
           mkdir -p ./download
