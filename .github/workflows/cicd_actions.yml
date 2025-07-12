@@ -39,9 +39,14 @@ jobs:
           path_extract="./toolchain/arm-clang"
           mkdir -p "$path_extract"
           tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
-          cd ./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64
           ls
-          cd ./bin
+          cd toolchain
+          ls
+          cd arm-clang
+          ls
+          cd ATfE-20.1.0-Linux-x86_64
+          ls
+          cd bin
           ls
 
       - name: Build firmware with Arm-GNU toolchain
