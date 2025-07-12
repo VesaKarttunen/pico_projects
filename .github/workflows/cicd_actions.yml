@@ -32,7 +32,6 @@ jobs:
           mkdir -p "$path_extract"
           tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
 
-
           # ARM Clang (LLVM) toolchain for 32-bit bare-metal target for Linux 64-bit host
           download_url="https://github.com/arm/arm-toolchain/releases/download/release-20.1.0-ATfE/ATfE-20.1.0-Linux-x86_64.tar.xz"
           path_tar="./download/arm-clang.tar.xz"
@@ -49,7 +48,7 @@ jobs:
       - name: Build firmware with Arm-Clang toolchain
         run: |
           export PATH=./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64/bin:$PATH
-          cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64/bin
+          cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=./toolchain/arm-clang/ATfE-20.1.0-Linux-x86_64
           cmake --build ./build_clang
 
       - name: Create source file list for static analysis and format checks
