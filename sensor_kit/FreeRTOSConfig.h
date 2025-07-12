@@ -9,7 +9,7 @@
 #define configMAX_PRIORITIES     32
 #define configMINIMAL_STACK_SIZE (configSTACK_DEPTH_TYPE)512
 #define configUSE_16_BIT_TICKS   0
-#define configIDLE_SHOULD_YIELD 1
+#define configIDLE_SHOULD_YIELD  1
 
 // Synchronization
 #define configUSE_MUTEXES              1
