@@ -22,4 +22,4 @@ include(cmake/FreeRTOS_Kernel_import.cmake)
 
 include(cmake/compiler_warning_options.cmake)
 
-add_subdirectory(basic_demo)
+add_subdirectory(plain_pico)
