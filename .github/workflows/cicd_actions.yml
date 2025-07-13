@@ -24,10 +24,9 @@ jobs:
            cppcheck \
            gcc-arm-none-eabi
 
+          # Change the updated clang tool versions to be the default versions
           sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
           sudo update-alternatives --install /usr/bin/clang-tidy   clang-tidy   /usr/bin/clang-tidy-19   999
-          clang-format --version
-          clang-tidy --version
 
           # Create SW tool download directory
           mkdir -p ./download
