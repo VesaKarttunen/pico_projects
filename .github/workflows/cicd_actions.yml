@@ -17,9 +17,12 @@ jobs:
 
       - name: Install missing SW tools
         run: |
-          # Get Clang-format, Clang-tidy, Cppcheck and Ninja
           sudo apt-get update
-          sudo apt-get install -y clang clang-format-19 clang-tidy clang-tools gcc-arm-none-eabi cppcheck ninja-build
+          sudo apt-get install -y \
+           clang-format-19 \
+           clang-tidy-19 \
+           cppcheck \
+           gcc-arm-none-eabi
 
           # Create SW tool download directory
           mkdir -p ./download
@@ -47,7 +50,6 @@ jobs:
 
       - name: Build firmware with Arm-Clang toolchain
         run: |
-          export PATH=./toolchain/arm-clang/bin:$PATH
           cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-clang
           cmake --build ./build_clang
 
@@ -57,9 +59,11 @@ jobs:
       - name: Check code style with clang-format
         run: clang-format-19 --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
+      - name: Run static analysis with clang-tidy
+        run: python ./cicd_pipeline/script/run-clang-tidy.py -quiet -config-file .clang-tidy -p ./build_clang -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
+
       - name: Run static analysis with Cppcheck
         run: |
-          # Runner has another cppcheck.exe installed that is broken. To prevent calling it, add the correct version first in the Path.
           cppcheck \
             --check-level=exhaustive \
             --enable=all \
