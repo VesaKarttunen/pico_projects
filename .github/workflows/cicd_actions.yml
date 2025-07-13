@@ -66,7 +66,7 @@ jobs:
         run: python ./cicd_pipeline/script/generate_source_file_list.py ./ source_file_list.txt
 
       - name: Check code style with clang-format
-        run: clang-format-19 --Werror --dry-run --verbose --style=file --files=source_file_list.txt
+        run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
       - name: Run static analysis with clang-tidy
         run: python ./cicd_pipeline/script/run-clang-tidy.py -quiet -config-file .clang-tidy -p ./build_clang -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"

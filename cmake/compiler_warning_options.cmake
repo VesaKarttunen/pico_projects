@@ -96,7 +96,7 @@ set(CompilerWarningsAllClang
     -Wno-missing-noreturn
     -Wno-nonportable-system-include-path
     -Wno-padded
-    -Wno-unsafe-buffer-usage-in-libc-call)
+    -Wno-unsafe-buffer-usage)
 
 # Choose the applied set of compiler warnings based on the selected compiler.
 # This is done because GNU and Clang support somewhat different warnings.
