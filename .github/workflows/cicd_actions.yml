@@ -24,10 +24,14 @@ jobs:
            cppcheck \
            gcc-arm-none-eabi
 
-          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 100
-          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-19 100
+          echo "Testing start"
+          sudo update-alternatives --remove-all clang-format
+          sudo update-alternatives --remove-all clang-tidy
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-19 999
           clang-format --version
           clang-tidy --version
+          echo "Testing end"
 
           # Create SW tool download directory
           mkdir -p ./download
