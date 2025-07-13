@@ -22,7 +22,6 @@ jobs:
            clang-format-19 \
            clang-tidy-19 \
            cppcheck \
-           gcc-arm-none-eabi
 
           # Change the updated clang tool versions to be the default versions
           sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
@@ -32,7 +31,7 @@ jobs:
           mkdir -p ./download
 
           # ARM GNU toolchain for 32-bit bare-metal target for Linux 64-bit host
-          download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz"
+          download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.3.rel1/binrel/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi.tar.xz"
           path_tar="./download/arm-gnu.tar.xz"
           wget "$download_url" -O "$path_tar"
           path_extract="./toolchain/arm-gnu"
