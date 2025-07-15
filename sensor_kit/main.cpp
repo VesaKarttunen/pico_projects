@@ -1,4 +1,5 @@
 // Local project
+#include "button/button.hpp"
 #include "led/led.hpp"
 #include "temperature/temperature.hpp"
 #include "wifi_comm/wifi_comm.hpp"
@@ -71,6 +72,8 @@ int main()
 {
     stdio_init_all();
     Temperature::Init();
+    g_led.LedInit();
+    Button::ButtonInit();
 
     // Short delay to give time to connect UART after reboot
     sleep_ms(5000u);

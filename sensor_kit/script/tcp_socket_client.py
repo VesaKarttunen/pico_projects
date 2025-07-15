@@ -16,7 +16,8 @@ supported_str_args      = {"FALSE"   : 0.0,
                            "TRUE"    : 1.0,
                            "OFF"     : 0.0,
                            "ON"      : 1.0,
-                           "BLINKING": 2.0}
+                           "BLINKING": 2.0,
+                           "BUTTON"  : 3.0}
 
 def GetUserCommandToSend():
     while True:

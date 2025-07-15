@@ -5,6 +5,7 @@ set(SourceFiles
     app_command/app_command.cpp
     app_command/command_conf.cpp
     app_feedback/app_feedback.cpp
+    button/button.cpp
     led/led.cpp
     temperature/temperature.cpp
     wifi_comm/wifi_comm.cpp

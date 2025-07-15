@@ -4,12 +4,15 @@ enum struct LedMode
 {
     OFF      = 0,
     ON       = 1,
-    BLINKING = 2
+    BLINKING = 2,
+    BUTTON   = 3
 };
 
 class Led
 {
   public:
+    void LedInit();
+    void SetLedState(bool is_enabled);
     void SetMode(LedMode mode);
     void SetBlinkingPeriod_s(float period_s);
     void TaskPeriodic_100ms();
