@@ -49,11 +49,14 @@ void Led::TaskPeriodic_100ms()
             m_led_state = !m_led_state;
         }
     }
-    else if (m_mode == LedMode::BUTTON)
+    else if (m_mode == LedMode::BUTTON_PRESS)
     {
         m_led_state = Button::IsPressed();
     }
-
+    else if (m_mode == LedMode::BUTTON_TOGGLE)
+    {
+        m_led_state = Button::Toggle();
+    }
     // Call LED IO pin setting function only if LED state changes
     if (m_led_state != previous_led_state)
     {

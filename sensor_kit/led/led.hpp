@@ -2,10 +2,11 @@
 
 enum struct LedMode
 {
-    OFF      = 0,
-    ON       = 1,
-    BLINKING = 2,
-    BUTTON   = 3
+    OFF           = 0,
+    ON            = 1,
+    BLINKING      = 2,
+    BUTTON_PRESS  = 3,
+    BUTTON_TOGGLE = 4
 };
 
 class Led

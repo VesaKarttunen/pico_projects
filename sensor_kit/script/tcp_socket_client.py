@@ -12,12 +12,13 @@ queue_feedback = queue.Queue()
 supported_command_names = {"setledmode"            : "SetLedMode",
                            "setledblinkingperiod_s": "SetLedBlinkingPeriod_s"}
 
-supported_str_args      = {"FALSE"   : 0.0,
-                           "TRUE"    : 1.0,
-                           "OFF"     : 0.0,
-                           "ON"      : 1.0,
-                           "BLINKING": 2.0,
-                           "BUTTON"  : 3.0}
+supported_str_args      = {"FALSE"         : 0.0,
+                           "TRUE"          : 1.0,
+                           "OFF"           : 0.0,
+                           "ON"            : 1.0,
+                           "BLINKING"      : 2.0,
+                           "BUTTON_PRESS"  : 3.0,
+                           "BUTTON_TOGGLE" : 4.0}
 
 def GetUserCommandToSend():
     while True:

@@ -5,4 +5,5 @@ class Button
   public:
     static void Init();
     static bool IsPressed();
+    static bool Toggle();
 };

@@ -26,3 +26,18 @@ bool Button::IsPressed()
 {
     return !gpio_get(button_pin);
 }
+
+bool Button::Toggle()
+{
+    static bool previous_state = false;
+    static bool toggle_state   = false;
+    bool current_state         = IsPressed();
+
+    if (current_state && !previous_state)
+    {
+        toggle_state = !toggle_state;
+    }
+
+    previous_state = current_state;
+    return toggle_state;
+}
