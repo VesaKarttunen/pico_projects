@@ -3,6 +3,6 @@
 class Button
 {
   public:
-    static void ButtonInit();
-    static bool GetButtonState();
+    static void Init();
+    static bool IsPressed();
 };

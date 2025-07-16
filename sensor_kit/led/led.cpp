@@ -8,22 +8,22 @@
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
-void Led::LedInit()
+//---------------------------------------------------------------------------------------------------------------------
+// PRIVATE (STATIC) CONSTANT DEFINITIONS
+//---------------------------------------------------------------------------------------------------------------------
+
+// Waveshare sensor board has led connected to GPIO pin 10
+static constexpr unsigned led_pin = 10u;
+
+void Led::Init()
 {
-    uint led_pin = 10u;
     gpio_init(led_pin);
-    gpio_set_dir(led_pin, GPIO_OUT);
+    gpio_set_dir(led_pin, static_cast<bool>(GPIO_OUT));
 }
 
 void Led::SetMode(LedMode mode)
 {
     m_mode = mode;
-}
-
-void Led::SetLedState(bool is_enabled)
-{
-    uint led_pin = 10u;
-    gpio_put(led_pin, is_enabled);
 }
 
 void Led::TaskPeriodic_100ms()
@@ -51,14 +51,14 @@ void Led::TaskPeriodic_100ms()
     }
     else if (m_mode == LedMode::BUTTON)
     {
-        m_led_state = Button::GetButtonState();
+        m_led_state = Button::IsPressed();
     }
 
     // Call LED IO pin setting function only if LED state changes
     if (m_led_state != previous_led_state)
     {
-        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, !m_led_state);
-        SetLedState(m_led_state);
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, m_led_state);
+        gpio_put(led_pin, !m_led_state);
     }
 }
 

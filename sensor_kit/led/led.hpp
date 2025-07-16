@@ -11,8 +11,7 @@ enum struct LedMode
 class Led
 {
   public:
-    void LedInit();
-    void SetLedState(bool is_enabled);
+    static void Init();
     void SetMode(LedMode mode);
     void SetBlinkingPeriod_s(float period_s);
     void TaskPeriodic_100ms();

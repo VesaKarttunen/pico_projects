@@ -72,8 +72,8 @@ int main()
 {
     stdio_init_all();
     Temperature::Init();
-    g_led.LedInit();
-    Button::ButtonInit();
+    Led::Init();
+    Button::Init();
 
     // Short delay to give time to connect UART after reboot
     sleep_ms(5000u);
