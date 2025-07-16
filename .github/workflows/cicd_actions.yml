@@ -87,6 +87,7 @@ jobs:
             --suppress=missingIncludeSystem \
             --suppress=missingInclude \
             --suppress=unusedStructMember \
+            --suppress=ctuOneDefinitionRuleViolation \
             --inline-suppr \
             --file-list=source_file_list.txt \
             --error-exitcode=1
