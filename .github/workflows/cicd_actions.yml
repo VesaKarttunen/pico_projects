@@ -74,7 +74,7 @@ jobs:
 
       - name: Run static analysis with Cppcheck
         run: |
-          git clone --branch 2.17.x https://github.com/danmar/cppcheck.git /toolchain/cppcheck
+          git clone --branch 2.17.x https://github.com/danmar/cppcheck.git ./toolchain/cppcheck
           mkdir /toolchain/cppcheck/build
           cmake -G Ninja -S ./toolchain/cppcheck -B ./toolchain/cppcheck/build
           cmake --build ./toolchain/cppcheck/build
