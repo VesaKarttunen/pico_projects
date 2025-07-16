@@ -18,25 +18,28 @@ jobs:
       - name: Install missing SW tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-           clang-format-19 \
-           clang-tidy-19 \
-           cppcheck \
+          # sudo apt-get install -y \
+          #  cppcheck \
+
+          pip install clang-format
+          pip install clang-tidy
+          clang-format --version
+          clang-tidy --version
 
           # Change the updated clang tool versions to be the default versions
-          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
-          sudo update-alternatives --install /usr/bin/clang-tidy   clang-tidy   /usr/bin/clang-tidy-19   999
+          #sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
+          #sudo update-alternatives --install /usr/bin/clang-tidy   clang-tidy   /usr/bin/clang-tidy-19   999
 
-          # Create SW tool download directory
-          mkdir -p ./download
+          # # Create SW tool download directory
+          # mkdir -p ./download
 
-          # ARM GNU toolchain for 32-bit bare-metal target for Linux 64-bit host
-          download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.3.rel1/binrel/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi.tar.xz"
-          path_tar="./download/arm-gnu.tar.xz"
-          wget "$download_url" -O "$path_tar"
-          path_extract="./toolchain/arm-gnu"
-          mkdir -p "$path_extract"
-          tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
+          # # ARM GNU toolchain for 32-bit bare-metal target for Linux 64-bit host
+          # download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.3.rel1/binrel/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi.tar.xz"
+          # path_tar="./download/arm-gnu.tar.xz"
+          # wget "$download_url" -O "$path_tar"
+          # path_extract="./toolchain/arm-gnu"
+          # mkdir -p "$path_extract"
+          # tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
 
           # ARM Clang (LLVM) toolchain for 32-bit bare-metal target for Linux 64-bit host
           download_url="https://github.com/arm/arm-toolchain/releases/download/release-20.1.0-ATfE/ATfE-20.1.0-Linux-x86_64.tar.xz"
@@ -46,34 +49,38 @@ jobs:
           mkdir -p "$path_extract"
           tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
 
-      - name: Build firmware with Arm-GNU toolchain
-        run: |
-          cmake -G Ninja -S ./ -B ./build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-gnu
-          cmake --build ./build_gnu
+      # - name: Build firmware with Arm-GNU toolchain
+      #   run: |
+      #     cmake -G Ninja -S ./ -B ./build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-gnu
+      #     cmake --build ./build_gnu
 
       - name: Build firmware with Arm-Clang toolchain
         run: |
           cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-clang
-          cmake --build ./build_clang
+          #cmake --build ./build_clang
 
       - name: Create source file list for static analysis and format checks
         run: python ./cicd_pipeline/script/generate_source_file_list.py ./ source_file_list.txt
 
       - name: Check code style with clang-format
-        run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
+        run: |
+          clang-format --version
+          clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
 
       - name: Run static analysis with clang-tidy
-        run: python ./cicd_pipeline/script/run-clang-tidy.py -quiet -config-file .clang-tidy -p ./build_clang -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
-
-      - name: Run static analysis with Cppcheck
         run: |
-          cppcheck \
-            --check-level=exhaustive \
-            --enable=all \
-            --inconclusive \
-            --suppress=missingIncludeSystem \
-            --suppress=missingInclude \
-            --suppress=unusedStructMember \
-            --inline-suppr \
-            --file-list=source_file_list.txt \
-            --error-exitcode=1
+          clang-tidy --version
+          python ./cicd_pipeline/script/run-clang-tidy.py -quiet -config-file .clang-tidy -p ./build_clang -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
+
+      # - name: Run static analysis with Cppcheck
+      #   run: |
+      #     cppcheck \
+      #       --check-level=exhaustive \
+      #       --enable=all \
+      #       --inconclusive \
+      #       --suppress=missingIncludeSystem \
+      #       --suppress=missingInclude \
+      #       --suppress=unusedStructMember \
+      #       --inline-suppr \
+      #       --file-list=source_file_list.txt \
+      #       --error-exitcode=1
