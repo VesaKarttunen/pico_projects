@@ -28,11 +28,6 @@ target_link_libraries(plain_pico
         hardware_adc
         FreeRTOS-Kernel-Heap4)
 
-if(NOT (WIFI_SSID AND WIFI_PASSWORD))
-    message("Wi-Fi SSID and password missing from command line arguments\n")
-    message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> in cmake configuration step\n")
-endif()
-
 target_compile_definitions(plain_pico
     PRIVATE
         SECRET_WIFI_SSID="${WIFI_SSID}"

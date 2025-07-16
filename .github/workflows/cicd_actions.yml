@@ -17,20 +17,13 @@ jobs:
 
       - name: Install missing SW tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-           clang-format-19 \
-           clang-tidy-19 \
-           cppcheck \
-
-          # Change the updated clang tool versions to be the default versions
-          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
-          sudo update-alternatives --install /usr/bin/clang-tidy   clang-tidy   /usr/bin/clang-tidy-19   999
-
-          # Create SW tool download directory
-          mkdir -p ./download
+          # The easiest way to install the recent version of clang-format and clang-tidy is pip,
+          # since default apt-get package repos don't have the latest versions for ubuntu-24.04.
+          pip install clang-format
+          pip install clang-tidy
 
           # ARM GNU toolchain for 32-bit bare-metal target for Linux 64-bit host
+          mkdir -p ./download
           download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.3.rel1/binrel/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi.tar.xz"
           path_tar="./download/arm-gnu.tar.xz"
           wget "$download_url" -O "$path_tar"
@@ -46,27 +39,47 @@ jobs:
           mkdir -p "$path_extract"
           tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
 
+          # The easiest way to install the latest version of cppcheck is build it from the source
+          git clone --branch 2.17.x https://github.com/danmar/cppcheck.git ./toolchain/cppcheck
+          cmake -G Ninja -S ./toolchain/cppcheck -B ./toolchain/cppcheck/build
+          cmake --build ./toolchain/cppcheck/build
+
       - name: Build firmware with Arm-GNU toolchain
         run: |
-          cmake -G Ninja -S ./ -B ./build_gnu -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-gnu
+          cmake -G Ninja -S ./ -B ./build_gnu -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-gnu
           cmake --build ./build_gnu
 
       - name: Build firmware with Arm-Clang toolchain
         run: |
-          cmake -G Ninja -S ./ -B ./build_clang -D WIFI_SSID=dummy -D WIFI_PASSWORD=dummy -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-clang
+          cmake -G Ninja -S ./ -B ./build_clang -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-clang
           cmake --build ./build_clang
 
       - name: Create source file list for static analysis and format checks
         run: python ./cicd_pipeline/script/generate_source_file_list.py ./ source_file_list.txt
 
       - name: Check code style with clang-format
-        run: clang-format --Werror --dry-run --verbose --style=file --files=source_file_list.txt
+        run: |
+          clang-format --version
+          clang-format \
+           --Werror \
+           --dry-run \
+           --verbose \
+           --style=file \
+           --files=source_file_list.txt
 
       - name: Run static analysis with clang-tidy
-        run: python ./cicd_pipeline/script/run-clang-tidy.py -quiet -config-file .clang-tidy -p ./build_clang -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
+        run: |
+          clang-tidy --version
+          python ./cicd_pipeline/script/run-clang-tidy.py \
+            -quiet \
+            -config-file .clang-tidy \
+            -p ./build_clang \
+            -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
 
       - name: Run static analysis with Cppcheck
         run: |
+          PATH="./toolchain/cppcheck/build/bin:$PATH"
+          cppcheck --version
           cppcheck \
             --check-level=exhaustive \
             --enable=all \

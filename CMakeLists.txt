@@ -23,5 +23,13 @@ include(cmake/FreeRTOS_Kernel_import.cmake)
 
 include(cmake/compiler_warning_options.cmake)
 
+if(NOT (WIFI_SSID AND WIFI_PASSWORD))
+    message("Wi-Fi SSID and/or password are missing from command line arguments")
+    message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> in cmake configuration step to allow connecting into Wi-Fi")
+
+    set(WIFI_SSID     dummy_ssid)
+    set(WIFI_PASSWORD dummy_password)
+endif()
+
 add_subdirectory(plain_pico)
 add_subdirectory(sensor_kit)
