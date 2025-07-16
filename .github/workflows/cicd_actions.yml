@@ -30,8 +30,8 @@ jobs:
           #sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 999
           #sudo update-alternatives --install /usr/bin/clang-tidy   clang-tidy   /usr/bin/clang-tidy-19   999
 
-          # # Create SW tool download directory
-          # mkdir -p ./download
+          # Create SW tool download directory
+          mkdir -p ./download
 
           # # ARM GNU toolchain for 32-bit bare-metal target for Linux 64-bit host
           # download_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.3.rel1/binrel/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi.tar.xz"
