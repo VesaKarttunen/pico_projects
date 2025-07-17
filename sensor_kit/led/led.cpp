@@ -55,7 +55,7 @@ void Led::TaskPeriodic_100ms()
     }
     else if (m_mode == LedMode::BUTTON_TOGGLE)
     {
-        m_led_state = Button::Toggle();
+        m_led_state = g_button.Toggle();
     }
     // Call LED IO pin setting function only if LED state changes
     if (m_led_state != previous_led_state)

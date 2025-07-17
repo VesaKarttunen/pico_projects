@@ -29,15 +29,15 @@ bool Button::IsPressed()
 
 bool Button::Toggle()
 {
-    static bool previous_state = false;
-    static bool toggle_state   = false;
-    bool current_state         = IsPressed();
+    bool current_state = IsPressed();
 
-    if (current_state && !previous_state)
+    if (current_state && !m_previous_state)
     {
-        toggle_state = !toggle_state;
+        m_toggled_state = !m_toggled_state;
     }
 
-    previous_state = current_state;
-    return toggle_state;
+    m_previous_state = current_state;
+    return m_toggled_state;
 }
+
+Button g_button;
