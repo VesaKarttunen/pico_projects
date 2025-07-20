@@ -55,7 +55,7 @@ jobs:
           cmake --build ./build_clang
 
       - name: Create source file list for static analysis and format checks
-        run: python ./cicd_pipeline/script/generate_source_file_list.py ./ source_file_list.txt
+        run: python ./dev_tool/generate_source_file_list.py ./ source_file_list.txt
 
       - name: Check code style with clang-format
         run: |
@@ -70,7 +70,7 @@ jobs:
       - name: Run static analysis with clang-tidy
         run: |
           clang-tidy --version
-          python ./cicd_pipeline/script/run-clang-tidy.py \
+          python ./dev_tool/run-clang-tidy.py \
             -quiet \
             -config-file .clang-tidy \
             -p ./build_clang \
