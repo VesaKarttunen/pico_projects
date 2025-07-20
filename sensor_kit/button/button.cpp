@@ -27,17 +27,17 @@ bool Button::IsPressed()
     return !gpio_get(button_pin);
 }
 
-bool Button::Toggle()
+// Returns rising edge detection status for a button press.
+// Identifies when a button's state changes from OFF (not pressed) to ON (is pressed).
+bool Button::IsPressRisingEdge()
 {
-    bool current_state = IsPressed();
+    bool is_pressed_now = IsPressed();
 
-    if (current_state && !m_previous_state)
-    {
-        m_toggled_state = !m_toggled_state;
-    }
+    // Button press rising edge happens when button is now pressed and it was previously not pressed
+    bool is_press_rising_edge = is_pressed_now && !m_was_pressed_previously;
+    m_was_pressed_previously  = is_pressed_now;
 
-    m_previous_state = current_state;
-    return m_toggled_state;
+    return is_press_rising_edge;
 }
 
 Button g_button;

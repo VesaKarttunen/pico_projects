@@ -93,6 +93,7 @@ set(CompilerWarningsAllClang
     -pedantic-errors
     -Wno-c++98-compat
     -Wno-c++98-compat-pedantic
+    -Wno-covered-switch-default
     -Wno-missing-noreturn
     -Wno-nonportable-system-include-path
     -Wno-padded
