@@ -26,7 +26,7 @@ static constexpr float f_count_adc_steps = 4095.0f;
 // Max conversion range (ADC reference voltage) in Pico's PCB is 3.3 V
 static constexpr float f_adc_voltage_ref_V = 3.3f;
 
-// ADC step size is reference voltage devided by number of levels
+// ADC step size is reference voltage devided by number of steps
 static constexpr float f_adc_voltage_step_size_V = f_adc_voltage_ref_V / f_count_adc_steps;
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ void Temperature::Init()
 float Temperature::GetPcbTemperature_C()
 {
     // Voltage is converted into temperature value using the temperature sensor's characteristics.
-    // Pico's datasheet states that at 27 C temperature, the voltage is approximately 0.706V
+    // Pico's datasheet states that at 27 C temperature, the voltage is approximately 0.706 V
     // and the voltage decreases by 1.721 mV for every degree Celsius increase in temperature.
     float temperature_C = 27.0f - ((GetAdcVoltage_V() - 0.706f) / 1.721e-3f);
 

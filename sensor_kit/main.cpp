@@ -6,6 +6,7 @@
 #include "button/button.hpp"
 #include "led/led.hpp"
 #include "temperature/temperature.hpp"
+#include "utility/rtos_priority_levels.hpp"
 #include "wifi_comm/wifi_comm.hpp"
 
 // Pico SDK
@@ -94,28 +95,28 @@ int main()
                 "TaskInit",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
-                5,
+                TaskPriority::VERY_HIGH_5,
                 nullptr);
 
     xTaskCreate(TaskPeriodic_100ms,
                 "TaskPeriodic_100ms",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
-                4,
+                TaskPriority::HIGH_4,
                 nullptr);
 
     xTaskCreate(TaskPeriodic_1s,
                 "TaskPeriodic_1s",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
-                3,
+                TaskPriority::MID_3,
                 nullptr);
 
     xTaskCreate(TaskPeriodic_60s,
                 "TaskPeriodic_60s",
                 configMINIMAL_STACK_SIZE,
                 nullptr,
-                2,
+                TaskPriority::LOW_2,
                 nullptr);
 
     vTaskStartScheduler();

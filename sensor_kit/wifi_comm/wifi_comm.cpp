@@ -8,6 +8,7 @@
 // Local project
 #include "app_command/app_command.hpp"
 #include "app_feedback/app_feedback.hpp"
+#include "utility/rtos_priority_levels.hpp"
 
 // Pico SDK
 #include "pico/cyw43_arch.h"
@@ -125,13 +126,13 @@ static void TaskCreateSocket(void* p)
                            TaskReceiveComm,
                            &socket_new,
                            DEFAULT_THREAD_STACKSIZE,
-                           2);
+                           TaskPriority::LOW_2);
 
             sys_thread_new("TaskSendComm",
                            TaskSendComm,
                            &socket_new,
                            DEFAULT_THREAD_STACKSIZE,
-                           2);
+                           TaskPriority::LOW_2);
         }
     }
 }
@@ -175,5 +176,5 @@ void WifiComm::Init()
                    TaskCreateSocket,
                    nullptr,
                    DEFAULT_THREAD_STACKSIZE,
-                   2);
+                   TaskPriority::LOW_2);
 }
