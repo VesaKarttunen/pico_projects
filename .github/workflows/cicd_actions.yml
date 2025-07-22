@@ -40,12 +40,14 @@ jobs:
           tar -C "$path_extract" --strip-components=1 -xf "$path_tar"
 
           # The easiest way to install the latest version of cppcheck is build it from the source
-          git clone --branch 2.17.x https://github.com/danmar/cppcheck.git ./toolchain/cppcheck
+          git clone https://github.com/danmar/cppcheck.git ./toolchain/cppcheck --branch 2.18.x --depth 1
           cmake -G Ninja -S ./toolchain/cppcheck -B ./toolchain/cppcheck/build
           cmake --build ./toolchain/cppcheck/build
 
       - name: Build firmware with Arm-GNU toolchain
         run: |
+          cmake --version
+          ninja --version
           cmake -G Ninja -S ./ -B ./build_gnu -D PICO_TOOLCHAIN_PATH=${{github.workspace}}/toolchain/arm-gnu
           cmake --build ./build_gnu
 
@@ -61,11 +63,11 @@ jobs:
         run: |
           clang-format --version
           clang-format \
-           --Werror \
-           --dry-run \
-           --verbose \
-           --style=file \
-           --files=source_file_list.txt
+            --Werror \
+            --dry-run \
+            --verbose \
+            --style=file \
+            --files=source_file_list.txt
 
       - name: Run static analysis with clang-tidy
         run: |

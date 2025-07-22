@@ -1,7 +1,7 @@
 // Own
 #include "temperature.hpp"
 
-// Pico-SDK
+// Pico SDK
 #include "hardware/adc.h"
 
 void Temperature::Init()

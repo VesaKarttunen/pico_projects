@@ -1,25 +1,37 @@
+//---------------------------------------------------------------------------------------------------------------------
+// LED
+//---------------------------------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------------------------------
+// PRIVATE INCLUDE DIRECTIVES
+//---------------------------------------------------------------------------------------------------------------------
+
 // Own
 #include "led.hpp"
 
-// Local-project
+// Local project
 #include "button/button.hpp"
 
-// Pico-SDK
+// Pico SDK
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
 //---------------------------------------------------------------------------------------------------------------------
-// PRIVATE (STATIC) CONSTANT DEFINITIONS
+// PRIVATE CONSTANT DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
 // Waveshare sensor board has LED connected to GPIO pin 10
-static constexpr unsigned led_pin = 10u;
+static constexpr unsigned f_led_pin = 10u;
+
+//---------------------------------------------------------------------------------------------------------------------
+// PUBLIC MEMBER FUNCTION DEFINITIONS
+//---------------------------------------------------------------------------------------------------------------------
 
 void Led::Init()
 {
-    gpio_init(led_pin);
-    gpio_set_dir(led_pin, static_cast<bool>(GPIO_OUT));
-    gpio_put(led_pin, true);
+    gpio_init(f_led_pin);
+    gpio_set_dir(f_led_pin, static_cast<bool>(GPIO_OUT));
+    gpio_put(f_led_pin, true);
 }
 
 void Led::SetMode(LedMode mode)
@@ -77,7 +89,7 @@ void Led::TaskPeriodic_100ms()
     if (m_led_state != previous_led_state)
     {
         cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, m_led_state);
-        gpio_put(led_pin, !m_led_state);
+        gpio_put(f_led_pin, !m_led_state);
     }
 }
 
@@ -85,5 +97,9 @@ void Led::SetBlinkingPeriod_s(float period_s)
 {
     m_blinking_period_s = period_s;
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+// PUBLIC VARIABLE DEFINITIONS/INSTANTIATIONS
+//---------------------------------------------------------------------------------------------------------------------
 
 Led g_led;

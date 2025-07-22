@@ -1,7 +1,7 @@
 // Own
 #include "led.hpp"
 
-// Pico-SDK
+// Pico SDK
 #include "pico/cyw43_arch.h"
 
 void Led::SetMode(LedMode mode)

@@ -1,11 +1,11 @@
 // Own
 #include "wifi_comm.hpp"
 
-// Local-project
+// Local project
 #include "app_command/app_command.hpp"
 #include "app_feedback/app_feedback.hpp"
 
-// Pico-SDK
+// Pico SDK
 #include "pico/cyw43_arch.h"
 
 // lwIP
@@ -133,7 +133,7 @@ void WifiComm::Init()
     std::printf("Connecting to Wi-Fi...\n");
 
     // Wi-Fi SSID and password are given as command line arguments in cmake configuration step:
-    // $ cmake -G "Ninja" -S <source-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
+    // $ cmake -G Ninja -S <source-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
     // Never write the password into source code directly!
     int status = cyw43_arch_wifi_connect_timeout_ms(SECRET_WIFI_SSID,
                                                     SECRET_WIFI_PASSWORD,

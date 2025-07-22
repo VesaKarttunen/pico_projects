@@ -3,7 +3,7 @@
 #include "temperature/temperature.hpp"
 #include "wifi_comm/wifi_comm.hpp"
 
-// Pico-SDK
+// Pico SDK
 #include "pico/stdlib.h"
 
 // FreeRTOS

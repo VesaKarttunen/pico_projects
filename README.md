@@ -43,7 +43,7 @@ Build using ARM-GNU Toolchain (assumed to be in the PATH):
 
     $ mkdir <build-dir>
     $ cd    <build-dir>
-    $ cmake -G "Ninja" -S <source-repo-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
+    $ cmake -G Ninja -S <source-repo-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
 
 Build using ARM-Clang Toolchain:
 

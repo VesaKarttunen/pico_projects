@@ -1,15 +1,19 @@
+//---------------------------------------------------------------------------------------------------------------------
+// Button
+//---------------------------------------------------------------------------------------------------------------------
+
 // Own
 #include "button.hpp"
 
-// Pico-SDK
+// Pico SDK
 #include "pico/stdlib.h"
 
 //---------------------------------------------------------------------------------------------------------------------
-// PRIVATE (STATIC) CONSTANT DEFINITIONS
+// PRIVATE CONSTANT DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
 // Waveshare sensor board has button connected to GPIO pin 3
-static constexpr unsigned button_pin = 3u;
+static constexpr unsigned f_button_pin = 3u;
 
 //---------------------------------------------------------------------------------------------------------------------
 // PUBLIC MEMBER FUNCTION DEFINITIONS
@@ -17,14 +21,14 @@ static constexpr unsigned button_pin = 3u;
 
 void Button::Init()
 {
-    gpio_init(button_pin);
-    gpio_set_dir(button_pin, static_cast<bool>(GPIO_IN));
-    gpio_pull_up(button_pin);
+    gpio_init(f_button_pin);
+    gpio_set_dir(f_button_pin, static_cast<bool>(GPIO_IN));
+    gpio_pull_up(f_button_pin);
 }
 
 bool Button::IsPressed()
 {
-    return !gpio_get(button_pin);
+    return !gpio_get(f_button_pin);
 }
 
 // Returns rising edge detection status for a button press.
@@ -39,5 +43,9 @@ bool Button::IsPressRisingEdge()
 
     return is_press_rising_edge;
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+// PUBLIC VARIABLE DEFINITIONS/INSTANTIATIONS
+//---------------------------------------------------------------------------------------------------------------------
 
 Button g_button;

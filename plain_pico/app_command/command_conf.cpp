@@ -1,6 +1,6 @@
 #include "command_conf.hpp"
 
-// Local-project
+// Local project
 #include "led/led.hpp"
 
 // STD
