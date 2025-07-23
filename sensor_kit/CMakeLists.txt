@@ -7,9 +7,10 @@ set(SourceFiles
     app_feedback/app_feedback.cpp
     button/button.cpp
     led/led.cpp
+    main.cpp
+    rtos_task/rtos_task-setup.cpp
     temperature/temperature.cpp
-    wifi_comm/wifi_comm.cpp
-    main.cpp)
+    wifi_comm/wifi_comm.cpp)
 
 set_source_files_properties(${SourceFiles}
     PROPERTIES COMPILE_OPTIONS

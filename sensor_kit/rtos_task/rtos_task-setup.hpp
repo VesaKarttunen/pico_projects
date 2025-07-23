@@ -1,29 +1,13 @@
 //---------------------------------------------------------------------------------------------------------------------
-// Main
+// RTOS Task Setup
+// -Specifies task function content and their configuration (such as priority, stack size etc.)
 //---------------------------------------------------------------------------------------------------------------------
 
-// Local project
-#include "rtos_task/rtos_task-setup.hpp"
-
-// Pico SDK
-#include "pico/stdlib.h"
-
-// FreeRTOS
-#include "FreeRTOS.h"
-#include "task.h"
+#pragma once
 
 //---------------------------------------------------------------------------------------------------------------------
-// MAIN FUNCTION DEFINITION
+// PUBLIC FUNCTION DECLARATIONS
 //---------------------------------------------------------------------------------------------------------------------
 
-int main()
-{
-    InitNonBlockingModules();
-
-    // Short delay to give time to connect UART after reboot
-    sleep_ms(5000u);
-
-    CreateRtosTasks();
-
-    vTaskStartScheduler();
-}
+extern void InitNonBlockingModules();
+extern void CreateRtosTasks();
