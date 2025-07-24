@@ -76,7 +76,7 @@ jobs:
             -quiet \
             -config-file .clang-tidy \
             -p ./build_clang \
-            -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?FreeRTOS-Kernel).*$"
+            -source-filter "^(?!.*?catch2|.*?pico-sdk|.*?third_party).*$"
 
       - name: Run static analysis with Cppcheck
         run: |

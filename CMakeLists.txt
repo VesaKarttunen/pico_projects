@@ -10,7 +10,7 @@ set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(PICO_BOARD    pico2_w)
 set(PICO_PLATFORM rp2350-arm-s)
 
-include(pico-sdk/pico_sdk_init.cmake)
+include(third_party/pico-sdk/pico_sdk_init.cmake)
 
 project(PicoProjects
     LANGUAGES C CXX ASM
@@ -18,7 +18,7 @@ project(PicoProjects
 
 pico_sdk_init()
 
-set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/FreeRTOS-Kernel)
+set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/third_party/FreeRTOS-Kernel)
 include(cmake/FreeRTOS_Kernel_import.cmake)
 
 include(cmake/compiler_warning_options.cmake)
@@ -31,5 +31,4 @@ if(NOT (WIFI_SSID AND WIFI_PASSWORD))
     set(WIFI_PASSWORD dummy_password)
 endif()
 
-add_subdirectory(plain_pico)
-add_subdirectory(sensor_kit)
+add_subdirectory(projects)

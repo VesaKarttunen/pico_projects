@@ -2,10 +2,13 @@
 Raspberry Pico 2W based hobby projects.
 
 ## Repository structure
-Top-level folders are structured as sub-projects with the following meaning:
+Top-level folders are structured with the following meaning:
 
-- **plain_pico**: Demo project using only Pico 2W's own features without any extra HW. Thus, the only thing required to use the firmware produced by this project is the Pico 2W itself.
-- **sensor_kit**: Demo project using Pico 2W with Waveshare Electronics Sensor Kit B.
+- **projects**: Own project source code
+    - **plain_pico**: Demo project using only Pico 2W's own features without any extra HW. Thus, the only thing required to use the firmware produced by this project is the Pico 2W itself.
+    - **sensor_kit**: Demo project using Waveshare Electronics Sensor Kit B.
+    - **buggy_robot**: (upcoming) Demo project using Kitronik Autonomous Robotics Platform Buggy.
+- **third_party**: External third-party dependencies, such as code from other projects, that are not part of the own source code of this repository.
 
 ## Build tools
 To build and use the projects in this repository, the following SW tools are required:
