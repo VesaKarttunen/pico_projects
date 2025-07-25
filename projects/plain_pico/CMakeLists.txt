@@ -30,8 +30,8 @@ target_link_libraries(plain_pico
 
 target_compile_definitions(plain_pico
     PRIVATE
-        SECRET_WIFI_SSID="${WIFI_SSID}"
-        SECRET_WIFI_PASSWORD="${WIFI_PASSWORD}")
+        WIFI_SSID="${WIFI_SSID}"
+        WIFI_PASSWORD="${WIFI_PASSWORD}")
 
 pico_enable_stdio_usb(plain_pico  ON)
 pico_enable_stdio_uart(plain_pico OFF)

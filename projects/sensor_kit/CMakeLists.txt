@@ -35,8 +35,9 @@ target_link_libraries(sensor_kit
 
 target_compile_definitions(sensor_kit
     PRIVATE
-        SECRET_WIFI_SSID="${WIFI_SSID}"
-        SECRET_WIFI_PASSWORD="${WIFI_PASSWORD}")
+        WIFI_SSID="${WIFI_SSID}"
+        WIFI_PASSWORD="${WIFI_PASSWORD}"
+        HTTP_SERVER_URL="${HTTP_SERVER_URL}")
 
 pico_enable_stdio_usb(sensor_kit  ON)
 pico_enable_stdio_uart(sensor_kit OFF)

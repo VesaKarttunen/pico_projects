@@ -153,8 +153,8 @@ void WifiComm::Init()
     // Wi-Fi SSID and password are given as command line arguments in cmake configuration step:
     // $ cmake -G Ninja -S <source-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
     // Never write the password into source code directly!
-    int status = cyw43_arch_wifi_connect_timeout_ms(SECRET_WIFI_SSID,
-                                                    SECRET_WIFI_PASSWORD,
+    int status = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID,
+                                                    WIFI_PASSWORD,
                                                     CYW43_AUTH_WPA2_AES_PSK,
                                                     f_timeout_connecting_wifi_ms);
 

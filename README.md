@@ -46,13 +46,13 @@ Build using ARM-GNU Toolchain (assumed to be in the PATH):
 
     $ mkdir <build-dir>
     $ cd    <build-dir>
-    $ cmake -G Ninja -S <source-repo-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
+    $ cmake -G Ninja -S <source-repo-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> -D HTTP_SERVER_URL=<url>
 
 Build using ARM-Clang Toolchain:
 
     $ mkdir <build-dir>
     $ cd    <build-dir>
-    $ cmake -G Ninja -S <source-repo-dir> -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=<arm-clang-toolchain-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
+    $ cmake -G Ninja -S <source-repo-dir> -D PICO_COMPILER=pico_arm_clang -D PICO_TOOLCHAIN_PATH=<arm-clang-toolchain-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> -D HTTP_SERVER_URL=<url>
 
 ## Flashing instructions
 Getting the Pico into BOOTSEL mode using the BOOTSEL button during board power-up is simple but it is somewhat inconvenient since Pico does not have reset button thus requiring manually disconnecting and then connecting the USB cable (or otherwise turning OFF and ON the power from Pico).

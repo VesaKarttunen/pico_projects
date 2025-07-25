@@ -18,12 +18,13 @@ project(PicoProjects
 
 pico_sdk_init()
 
-if(NOT (WIFI_SSID AND WIFI_PASSWORD))
-    message("Wi-Fi SSID and/or password are missing from command line arguments")
-    message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> in cmake configuration step to allow connecting into Wi-Fi")
+if(NOT (WIFI_SSID AND WIFI_PASSWORD AND HTTP_SERVER_URL))
+    message("Wi-Fi SSID, password, or HTTP server URL are missing from command line arguments")
+    message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> -D HTTP_SERVER_URL=<url> in cmake configuration step to allow connecting into Wi-Fi")
 
-    set(WIFI_SSID     dummy_ssid)
-    set(WIFI_PASSWORD dummy_password)
+    set(WIFI_SSID       dummy_ssid)
+    set(WIFI_PASSWORD   dummy_password)
+    set(HTTP_SERVER_URL http://0.0.0.0:80)
 endif()
 
 add_subdirectory(projects)

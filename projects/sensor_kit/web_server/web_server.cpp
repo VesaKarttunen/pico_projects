@@ -45,8 +45,10 @@ void WebServer::Init()
     mg_log_set(MG_LL_DEBUG);
     mg_mgr_init(&f_mg_event_manager);
 
+    // Desired web server URL (http://ip_address:port) is given as command line argument
+    // in cmake configuration step using the following format: "-D HTTP_SERVER_URL=<url>"
     mg_http_listen(&f_mg_event_manager,
-                   "http://192.168.101.197:80",
+                   HTTP_SERVER_URL,
                    HttpEventHandler,
                    nullptr);
 }
@@ -57,7 +59,7 @@ void WebServer::Task(void* p)
 
     while (true)
     {
-        int timeout_ms = 1000;
+        int timeout_ms = 2000;
         mg_mgr_poll(&f_mg_event_manager, timeout_ms);
     }
 }
