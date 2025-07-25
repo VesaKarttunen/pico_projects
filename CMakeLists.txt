@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+set(CMAKE_CXX_SCAN_FOR_MODULES    OFF)
 
 set(PICO_BOARD    pico2_w)
 set(PICO_PLATFORM rp2350-arm-s)
@@ -18,11 +18,6 @@ project(PicoProjects
 
 pico_sdk_init()
 
-set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/third_party/FreeRTOS-Kernel)
-include(cmake/FreeRTOS_Kernel_import.cmake)
-
-include(cmake/compiler_warning_options.cmake)
-
 if(NOT (WIFI_SSID AND WIFI_PASSWORD))
     message("Wi-Fi SSID and/or password are missing from command line arguments")
     message("Give -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password> in cmake configuration step to allow connecting into Wi-Fi")
@@ -32,3 +27,4 @@ if(NOT (WIFI_SSID AND WIFI_PASSWORD))
 endif()
 
 add_subdirectory(projects)
+add_subdirectory(third_party)

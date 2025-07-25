@@ -21,7 +21,8 @@ add_executable(sensor_kit
 
 target_include_directories(sensor_kit
     PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR})
+        ./
+        ${CMAKE_SOURCE_DIR}/projects/shared/config)
 
 target_link_libraries(sensor_kit
     PRIVATE
