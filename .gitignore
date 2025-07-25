@@ -12,3 +12,13 @@ __pycache__/
 .pytest_cache/
 *.py[cod]
 *$py.class
+
+# Node dependencies
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Vite build output
+ dist/
+.vite/

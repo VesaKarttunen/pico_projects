@@ -32,7 +32,7 @@ static void HttpEventHandler(mg_connection* connection,
 
         if (mg_match(request->uri, mg_str("/api/hello"), nullptr))
         {
-            mg_http_reply(connection, 200, "", "Hello World!\n");
+            mg_http_reply(connection, 200, "Access-Control-Allow-Origin: *\n", "Hello World!\n");
         }
     }
 }
