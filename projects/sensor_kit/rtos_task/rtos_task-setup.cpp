@@ -14,6 +14,7 @@
 #include "led/led.hpp"
 #include "temperature/temperature.hpp"
 #include "utility/rtos_priority_levels.hpp"
+#include "web_server/web_server.hpp"
 #include "wifi_comm/wifi_comm.hpp"
 
 // Pico SDK
@@ -79,6 +80,14 @@ static void TaskInit(void* p)
     (void)p;
 
     WifiComm::Init();
+    WebServer::Init();
+
+    xTaskCreate(WebServer::Task,
+                "Web",
+                2048u,
+                nullptr,
+                TaskPriority::VERY_LOW_1,
+                nullptr);
 
     // Once completed, this initialization task will delete itself
     vTaskDelete(nullptr);

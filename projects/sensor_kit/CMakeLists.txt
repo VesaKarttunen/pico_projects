@@ -10,6 +10,7 @@ set(SourceFiles
     main.cpp
     rtos_task/rtos_task-setup.cpp
     temperature/temperature.cpp
+    web_server/web_server.cpp
     wifi_comm/wifi_comm.cpp)
 
 set_source_files_properties(${SourceFiles}
@@ -26,6 +27,7 @@ target_include_directories(sensor_kit
 
 target_link_libraries(sensor_kit
     PRIVATE
+        mongoose
         pico_stdlib
         pico_cyw43_arch_lwip_sys_freertos
         hardware_adc

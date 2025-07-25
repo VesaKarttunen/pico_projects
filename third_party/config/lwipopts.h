@@ -15,6 +15,7 @@
 #define LWIP_ARP                   1
 #define LWIP_ETHERNET              1
 #define LWIP_ICMP                  1
+#define LWIP_IGMP                  1
 #define TCP_WND                    (8 * TCP_MSS)
 #define TCP_MSS                    1460
 #define TCP_SND_BUF                (8 * TCP_MSS)
@@ -46,3 +47,4 @@
 #define DEFAULT_ACCEPTMBOX_SIZE    8
 #define TCPIP_MBOX_SIZE            8
 #define LWIP_TIMEVAL_PRIVATE       0
+#define SO_REUSE                   1
