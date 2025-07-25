@@ -6,7 +6,7 @@ target_include_directories(mongoose
     SYSTEM PUBLIC
         ../
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/projects/shared/config)
+        ../config)
 
 target_link_libraries(mongoose
     PRIVATE
