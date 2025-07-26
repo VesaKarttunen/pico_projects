@@ -10,6 +10,7 @@ set(SourceFiles
     main.cpp
     rtos_task/rtos_task-setup.cpp
     temperature/temperature.cpp
+    web_server/ui_page/ui_page_packed_filesystem.cpp
     web_server/web_server.cpp
     wifi_comm/wifi_comm.cpp)
 
