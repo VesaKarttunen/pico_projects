@@ -1,6 +1,24 @@
 project(SensorKit
     DESCRIPTION "Demo project using Waveshare Electronics Sensor Kit B for Pico")
 
+set(GeneratedWebPageFileSystemSourceFile
+    ${CMAKE_BINARY_DIR}/generated/web_page_packed_file_system.cpp)
+
+add_custom_command(
+    OUTPUT
+        ${GeneratedWebPageFileSystemSourceFile}
+    COMMAND
+         python script/generate_packed_file_system.py
+                web_server/ui_page
+                ${GeneratedWebPageFileSystemSourceFile}
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_LIST_DIR}
+    DEPENDS
+        web_server/ui_page/index.html
+        web_server/ui_page/main.js
+        web_server/ui_page/style.css
+        script//generate_packed_file_system.py)
+
 set(SourceFiles
     app_command/app_command.cpp
     app_command/command_conf.cpp
@@ -10,9 +28,9 @@ set(SourceFiles
     main.cpp
     rtos_task/rtos_task-setup.cpp
     temperature/temperature.cpp
-    web_server/ui_page/ui_page_packed_filesystem.cpp
     web_server/web_server.cpp
-    wifi_comm/wifi_comm.cpp)
+    wifi_comm/wifi_comm.cpp
+    ${GeneratedWebPageFileSystemSourceFile})
 
 set_source_files_properties(${SourceFiles}
     PROPERTIES COMPILE_OPTIONS
