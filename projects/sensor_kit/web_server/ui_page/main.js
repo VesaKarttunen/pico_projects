@@ -1,3 +1,8 @@
-const toggle = () => fetch('api/toggle_led');
+function SendCommand() {
+    const command  = document.getElementById('command').value;
+    const argument = document.getElementById('argument').value;
 
-document.getElementById('button_toggle_led').onclick = toggle;
+    fetch(`/api/${command}?arg=${argument}`);
+}
+
+document.getElementById('button_send_command').onclick = SendCommand;

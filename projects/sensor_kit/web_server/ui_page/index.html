@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <link href="style.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="main">
-    <h1>Sensor Kit UI</h1>
-    <button id="button_toggle_led">Toggle LED</button>
-  </div>
+   <h1>Sensor Kit UI</h1>
+   <label for="command">Select command:</label>
+   <select id="command">
+     <option value="set_led_mode">Set LED mode</option>
+     <option value="set_blinking_period_s">Set LED blinking period seconds</option>
+   </select>
+   <label for="argument">Give argument:</label>
+   <input type="text" id="argument" placeholder="BLINKING, 2.5, OFF, etc.">
+   <button id="button_send_command">Send command</button>
   <script src="main.js"></script>
 </body>
 </html>
