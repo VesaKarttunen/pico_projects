@@ -114,21 +114,30 @@ void WifiComm::Init()
 
     std::printf("Connecting to Wi-Fi...\n");
 
-    // Wi-Fi SSID and password are given as command line arguments in cmake configuration step:
-    // $ cmake -G Ninja -S <source-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
-    // Never write the password into source code directly!
-    int status = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID,
-                                                    WIFI_PASSWORD,
-                                                    CYW43_AUTH_WPA2_AES_PSK,
-                                                    f_timeout_connecting_wifi_ms);
+    // Keep retrying to connect Wi-Fi until succeeding
+    int counter_retry_wifi_connect = 0;
+    while (true)
+    {
+        // Wi-Fi SSID and password are given as command line arguments in cmake configuration step:
+        // $ cmake -G Ninja -S <source-dir> -D WIFI_SSID=<ssid> -D WIFI_PASSWORD=<password>
+        // Never write the password into source code directly!
+        int status = cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID,
+                                                        WIFI_PASSWORD,
+                                                        CYW43_AUTH_WPA2_AES_PSK,
+                                                        f_timeout_connecting_wifi_ms);
 
-    if (status == PICO_OK)
-    {
-        std::printf("Wi-Fi connected successfully!\n");
-    }
-    else
-    {
-        std::printf("Wi-Fi connection failed with error code: %i\n", status);
+        if (status == PICO_OK)
+        {
+            std::printf("Wi-Fi connected successfully!\n");
+            // Connection succeeded, break out from the while loop
+            break;
+        }
+        else
+        {
+            std::printf("Wi-Fi connection failed with error code: %i\nRetry count: %i\n",
+                        status,
+                        ++counter_retry_wifi_connect);
+        }
     }
 
     std::string_view ip_address = ip4addr_ntoa(netif_ip4_addr(netif_list));
