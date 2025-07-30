@@ -62,14 +62,14 @@ static bool SetLedMode(std::string_view arg)
 
 static bool SetLedBlinkingPeriod_s(std::string_view arg)
 {
-    bool is_arg_valid = false;
-    float period_s    = StrToFloat(arg, is_arg_valid);
+    auto period_s = ConvertStrToFloat(arg);
 
-    is_arg_valid &= period_s >= 0.0f;
+    bool is_arg_valid = period_s.has_value()
+                     && (period_s.value() >= 0.0f);
 
     if (is_arg_valid)
     {
-        g_led.SetBlinkingPeriod_s(period_s);
+        g_led.SetBlinkingPeriod_s(period_s.value());
     }
 
     return is_arg_valid;

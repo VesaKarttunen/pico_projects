@@ -10,13 +10,14 @@
 
 // STD
 #include <charconv>
+#include <optional>
 #include <string_view>
 
 //---------------------------------------------------------------------------------------------------------------------
 // PUBLIC FUNCTION DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
-inline float StrToFloat(std::string_view string, bool& is_success)
+inline std::optional<float> ConvertStrToFloat(std::string_view string)
 {
     const char* begin = string.data();
     const char* end   = string.data() + string.length();
@@ -25,8 +26,16 @@ inline float StrToFloat(std::string_view string, bool& is_success)
     auto status  = std::from_chars(begin, end, output);
 
     // Success if no error codes and the conversion reached the end of the string_view
-    is_success = (status.ec == std::errc{})
-              && (status.ptr == end);
+    bool is_success = (status.ec == std::errc{})
+                   && (status.ptr == end);
 
-    return output;
+    if (is_success)
+    {
+        return output;
+    }
+    else
+    {
+        // Conversion failed. Indicate error by returning empty value.
+        return {};
+    }
 }
