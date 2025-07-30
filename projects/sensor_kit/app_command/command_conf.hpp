@@ -16,7 +16,7 @@
 // PUBLIC TYPE DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
-using CommandHookFunc = void (&)(float);
+using CommandHookFunc = bool (&)(std::string_view);
 
 struct CommandHookMap
 {

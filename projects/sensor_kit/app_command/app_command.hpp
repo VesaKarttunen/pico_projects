@@ -9,16 +9,16 @@
 //---------------------------------------------------------------------------------------------------------------------
 
 // STD
-#include <array>
+#include <string_view>
 
 //---------------------------------------------------------------------------------------------------------------------
 // PUBLIC TYPE DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
-struct CommandFrame
+struct AppCommandInput
 {
-    std::array<char, 64> name;
-    float argument;
+    std::string_view name;
+    std::string_view arg;
 };
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -28,5 +28,5 @@ struct CommandFrame
 class AppCommand
 {
   public:
-    static void ProcessCommand(const CommandFrame& requested_command);
+    static bool ProcessCommand(const AppCommandInput& requested_command);
 };

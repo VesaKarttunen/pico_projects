@@ -8,9 +8,9 @@ add_custom_command(
     OUTPUT
         ${GeneratedWebPageFileSystemSourceFile}
     COMMAND
-         python script/generate_packed_file_system.py
-                web_server/ui_page
-                ${GeneratedWebPageFileSystemSourceFile}
+        python script/generate_packed_file_system.py
+            web_server/ui_page
+            ${GeneratedWebPageFileSystemSourceFile}
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_LIST_DIR}
     DEPENDS

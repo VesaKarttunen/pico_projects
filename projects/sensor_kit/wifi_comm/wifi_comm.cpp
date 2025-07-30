@@ -6,7 +6,6 @@
 #include "wifi_comm.hpp"
 
 // Local project
-#include "app_command/app_command.hpp"
 #include "app_feedback/app_feedback.hpp"
 #include "utility/rtos_priority_levels.hpp"
 
@@ -36,35 +35,6 @@ static constexpr uint32_t f_timeout_connecting_wifi_ms = 30'000u;
 //---------------------------------------------------------------------------------------------------------------------
 // PRIVATE FUNCTION DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
-
-// Own separate task is creater for each new socket connection
-static void TaskReceiveComm(void* p)
-{
-    // Socket descriptor value is just int number that is passed through void pointer
-    int socket = *static_cast<int*>(p);
-
-    while (true)
-    {
-        CommandFrame command_frame = {};
-
-        int count_bytes_received = lwip_read(socket,
-                                             &command_frame,
-                                             sizeof(command_frame));
-
-        if (count_bytes_received <= 0)
-        {
-            std::printf("Reading from the TCP socket failed. Closing the socket.\n");
-            break;
-        }
-        else // NOLINT(*else-after-return)
-        {
-            AppCommand::ProcessCommand(command_frame);
-        }
-    }
-
-    lwip_close(socket);
-    vTaskDelete(nullptr);
-}
 
 // Own separate task is creater for each new socket connection
 static void TaskSendComm(void* p)
@@ -121,13 +91,7 @@ static void TaskCreateSocket(void* p)
         {
             std::printf("New socket connection accepted\n");
 
-            // Create tasks to handle sending and receiving data with the socket
-            sys_thread_new("TaskReceiveComm",
-                           TaskReceiveComm,
-                           &socket_new,
-                           DEFAULT_THREAD_STACKSIZE,
-                           TaskPriority::LOW_2);
-
+            // Create tasks to handle sending data with the socket
             sys_thread_new("TaskSendComm",
                            TaskSendComm,
                            &socket_new,

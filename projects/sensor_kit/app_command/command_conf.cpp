@@ -11,6 +11,7 @@
 
 // Local project
 #include "led/led.hpp"
+#include "utility/string_conversion.hpp"
 
 // STD
 #include <array>
@@ -20,14 +21,58 @@
 // PRIVATE FUNCTION DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
-static void SetLedMode(float mode)
+static bool SetLedMode(std::string_view arg)
 {
-    g_led.SetMode(static_cast<LedMode>(mode));
+    bool is_arg_valid = true;
+    LedMode mode      = LedMode::OFF;
+
+    if (arg == "ON")
+    {
+        mode = LedMode::ON;
+    }
+    else if (arg == "OFF")
+    {
+        mode = LedMode::OFF;
+    }
+    else if (arg == "BLINKING")
+    {
+        mode = LedMode::BLINKING;
+    }
+    else if (arg == "BUTTON_PRESS")
+    {
+        mode = LedMode::BUTTON_PRESS;
+    }
+    else if (arg == "BUTTON_TOGGLE")
+    {
+        mode = LedMode::BUTTON_TOGGLE;
+    }
+    else
+    {
+        // Not a valid argument
+        is_arg_valid = false;
+    }
+
+    if (is_arg_valid)
+    {
+        g_led.SetMode(mode);
+    }
+
+    return is_arg_valid;
 }
 
-static void SetLedBlinkingPeriod_s(float period_s)
+static bool SetLedBlinkingPeriod_s(std::string_view arg)
 {
-    g_led.SetBlinkingPeriod_s(period_s);
+    bool is_arg_valid = false;
+    float period_s    = StrToFloat(arg, is_arg_valid);
+
+    is_arg_valid &= period_s >= 0.0f;
+
+    if (is_arg_valid)
+    {
+        g_led.SetBlinkingPeriod_s(period_s);
+    }
+
+    return is_arg_valid;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -37,9 +82,9 @@ static void SetLedBlinkingPeriod_s(float period_s)
 // clang-format off
 // NOLINTNEXTLINE(*interfaces-global-init)
 static std::array<CommandHookMap, 2> supported_commands{{
-    {.name      = "SetLedMode",
+    {.name      = "set_led_mode",
      .hook_func = SetLedMode},
-    {.name      = "SetLedBlinkingPeriod_s",
+    {.name      = "set_led_blinking_period_s",
      .hook_func = SetLedBlinkingPeriod_s}
 }};
 // clang-format on

@@ -1,39 +1,32 @@
 //---------------------------------------------------------------------------------------------------------------------
-// Application Commands
+// String Conversion Helper Functions
 //---------------------------------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------------------------------------------
-// PRIVATE INCLUDE DIRECTIVES
-//---------------------------------------------------------------------------------------------------------------------
+#pragma once
 
-// Own
-#include "app_command.hpp"
-#include "command_conf.hpp"
+//---------------------------------------------------------------------------------------------------------------------
+// PUBLIC INCLUDE DIRECTIVES
+//---------------------------------------------------------------------------------------------------------------------
 
 // STD
-#include <cstdio>
+#include <charconv>
 #include <string_view>
 
 //---------------------------------------------------------------------------------------------------------------------
-// PUBLIC MEMBER FUNCTION DEFINITIONS
+// PUBLIC FUNCTION DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
 
-bool AppCommand::ProcessCommand(const AppCommandInput& requested_command)
+inline float StrToFloat(std::string_view string, bool& is_success)
 {
-    bool is_success = false;
+    const char* begin = string.data();
+    const char* end   = string.data() + string.length();
 
-    for (auto available_command : CommandConf::GetSupportedCommands())
-    {
-        if (available_command.name == requested_command.name)
-        {
-            is_success = available_command.hook_func(requested_command.arg);
-        }
-    }
+    float output = 0.0f;
+    auto status  = std::from_chars(begin, end, output);
 
-    if (!is_success)
-    {
-        std::printf("Command API call failed\n");
-    }
+    // Success if no error codes and the conversion reached the end of the string_view
+    is_success = (status.ec == std::errc{})
+              && (status.ptr == end);
 
-    return is_success;
+    return output;
 }
