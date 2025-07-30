@@ -27,6 +27,7 @@ bool AppCommand::ProcessCommand(const AppCommandInput& requested_command)
         if (available_command.name == requested_command.name)
         {
             is_success = available_command.hook_func(requested_command.arg);
+            break;
         }
     }
 
