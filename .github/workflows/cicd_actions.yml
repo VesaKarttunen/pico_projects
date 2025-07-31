@@ -90,7 +90,7 @@ jobs:
             --suppress=missingInclude \
             --suppress=unusedStructMember \
             --suppress=ctuOneDefinitionRuleViolation \
-             --suppress=useStlAlgorithm \
+            --suppress=useStlAlgorithm \
             --inline-suppr \
             --file-list=source_file_list.txt \
             --error-exitcode=1
