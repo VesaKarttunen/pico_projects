@@ -90,10 +90,8 @@ void WebServer::Init()
     f_options_serve_files.root_dir = "/";
     f_options_serve_files.fs       = &mg_fs_packed;
 
-    // Desired web server URL (<url> = http://<ip_address>:<port>) is given as command line argument
-    // in cmake configuration step using the following format: "-D HTTP_SERVER_URL=<url>"
     mg_http_listen(&f_event_manager,
-                   HTTP_SERVER_URL,
+                   "http://0.0.0.0:80",
                    HttpEventHandler,
                    nullptr);
 }
