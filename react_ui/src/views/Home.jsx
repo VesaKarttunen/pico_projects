@@ -10,7 +10,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 
 export default function Home() {
-    const [command, SetCommand] = useState("set_led_mode");
+    const [command, SetCommand] = useState("");
     const [argument, SetArgument] = useState("");
 
     const HandleCommandChange = (event, new_command) => {
