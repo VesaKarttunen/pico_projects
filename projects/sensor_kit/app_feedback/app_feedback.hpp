@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <array>
+
 //---------------------------------------------------------------------------------------------------------------------
 // PUBLIC TYPE DEFINITIONS
 //---------------------------------------------------------------------------------------------------------------------
@@ -11,8 +13,10 @@
 struct FeedbackFrame
 {
     float time_stamp_s;
-    float pcb_temperature_C;
+    std::array<float, 16> signals;
 };
+
+using FeedbackBuffer = std::array<FeedbackFrame, 10>;
 
 //---------------------------------------------------------------------------------------------------------------------
 // PUBLIC CLASS DEFINITIONS
@@ -21,5 +25,5 @@ struct FeedbackFrame
 class AppFeedback
 {
   public:
-    static FeedbackFrame GetData();
+    static const FeedbackBuffer& GetData();
 };

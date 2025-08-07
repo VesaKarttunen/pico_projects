@@ -46,13 +46,13 @@ static void TaskSendComm(void* p)
 
     while (true)
     {
-        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(1000));
+        xTaskDelayUntil(&ticks_previous_wake, pdMS_TO_TICKS(10));
 
-        FeedbackFrame feedback_frame = AppFeedback::GetData();
+        const FeedbackBuffer& feedback_buffer = AppFeedback::GetData();
 
         int count_bytes_sent = lwip_write(socket,
-                                          &feedback_frame,
-                                          sizeof(feedback_frame));
+                                          &feedback_buffer,
+                                          sizeof(feedback_buffer));
 
         if (count_bytes_sent <= 0)
         {

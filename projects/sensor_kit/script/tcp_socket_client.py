@@ -5,6 +5,7 @@ import struct
 import threading
 import time
 import queue
+import numpy as np
 
 queue_command  = queue.Queue()
 queue_feedback = queue.Queue()
@@ -65,9 +66,9 @@ socket_pico.connect((ip_address_pico, port_socket_pico))
 
 def ReceiveFeedbackFromSocket():
     while True:
-        count_recv_bytes = 8
+        count_recv_bytes = 68
         data_raw = socket_pico.recv(count_recv_bytes)
-        data_converted = struct.unpack("<2f", data_raw)
+        data_converted = struct.unpack("<17f", data_raw)
         queue_feedback.put(data_converted)
 
 # Create and start the thread
@@ -94,29 +95,43 @@ axis.grid()
 
 plt.title("Feedback data received from Pico")
 plt.xlabel("Time [s]")
-plt.ylabel("Temperature [C]")
+plt.ylabel("Signal")
 
-x_axis_data = []
-y_axis_data = []
+plot_data = []
+
+
 
 # Update function for animation
 def UpdateAnimation(frame_number):
-    while (not queue_feedback.empty()):
-        time_s, temperature_C = queue_feedback.get()
-        x_axis_data.append(time_s)
-        y_axis_data.append(temperature_C)
+    global plot_data
 
-    if len(x_axis_data) >= 2:
+    while (not queue_feedback.empty()):
+        data_frame = queue_feedback.get()
+        plot_data.append(data_frame)
+
+        plot_data = plot_data[-5000:]
+
+    if len(plot_data) >= 2:
+
+        plot_data_array = np.array(plot_data)
+        time_data       = plot_data_array[:,0]
+
+        number_of_signals = 16
+
+        for n in range(number_of_signals - 1):
+            signal_data = plot_data_array[:, n + 1]
+            line_object[0].set_data(time_data, signal_data)
+
         axis.relim()
         axis.autoscale_view()
-        axis.set_xlim(x_axis_data[0], x_axis_data[-1])
-        line_object[0].set_data(x_axis_data, y_axis_data)
+        axis.set_xlim(time_data[0], time_data[-1])
+
 
     return line_object
 
 plot_animation = anim.FuncAnimation(fig      = fig,
                                     func     = UpdateAnimation,
-                                    interval = 1000,
+                                    interval = 100,
                                     blit     = False,
                                     cache_frame_data = False)
 
